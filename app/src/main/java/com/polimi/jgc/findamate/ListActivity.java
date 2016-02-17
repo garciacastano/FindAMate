@@ -5,8 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.app.WindowDecorActionBar;
-
+import android.widget.ListView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -17,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+import java.util.ArrayList
 import android.widget.TextView;
 
 public class ListActivity extends AppCompatActivity {
@@ -120,6 +119,11 @@ public class ListActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_list, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
+            ArrayList<ActivityItem> listActivities = GetListActivities();
+            ListView lv = (ListView) rootView.findViewById(R.id.lv_activities);
+            lv.setAdapter(new ListviewActivityAdapter(getActivity(), listActivities));
+
             return rootView;
         }
     }
@@ -143,19 +147,17 @@ public class ListActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show  total pages.
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "YOUR INTERESTS";
                 case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
+                    return "ALL";
             }
             return null;
         }
