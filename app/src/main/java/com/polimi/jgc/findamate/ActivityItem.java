@@ -1,6 +1,7 @@
 package com.polimi.jgc.findamate;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by JGC on 17/02/2016.
@@ -8,18 +9,25 @@ import java.util.Calendar;
 public class ActivityItem {
     private String title;
     private String description;
-    private Categories category;
+    private String category;
     private Calendar date;
+    private double latitude;
+    private double longitude;
     private int participants;
     private int assistants;
 
-    public ActivityItem(String title, String description, Categories category, Calendar date, int participants, int assistants) {
+    public ActivityItem() {}
+
+    public ActivityItem(String title, String description, String category, Calendar date,
+                        int participants, int assistants, double latitude, double longitude) {
         this.title = title;
         this.description = description;
         this.category = category;
         this.date = date;
         this.participants = participants;
         this.assistants = assistants;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getTitle() {
@@ -38,16 +46,26 @@ public class ActivityItem {
         this.description = description;
     }
 
-    public Categories getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Categories category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
     public Calendar getDate() {
         return date;
+    }
+
+    public String getDayMonthYear() {
+        if(date.get(Calendar.AM_PM)==Calendar.PM){
+            return date.get(Calendar.HOUR)+12+":"+date.get(Calendar.MINUTE)+" - "+date.get(Calendar.DAY_OF_MONTH)+
+                    "/"+(int)date.get(Calendar.MONTH)+1+"/"+date.get(Calendar.YEAR);
+        }
+
+        return date.get(Calendar.HOUR)+":"+date.get(Calendar.MINUTE)+" - "+date.get(Calendar.DAY_OF_MONTH)+
+                "/"+date.get(Calendar.MONTH)+1+"/"+date.get(Calendar.YEAR);
     }
 
     public void setDate(Calendar date) {
@@ -68,6 +86,22 @@ public class ActivityItem {
 
     public void setAssistants(int assistants) {
         this.assistants = assistants;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }
 

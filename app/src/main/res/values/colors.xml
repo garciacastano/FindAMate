@@ -4,11 +4,12 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="date">#666666</color>
-    <color name="participants">#888888</color>
+    <color name="list_title">#040404</color>
+    <color name="list_category">#343434</color>
+    <color name="list_date">#666666</color>
+    <color name="list_participants">#888888</color>
     <color name="list_divider">#d9d9d9</color>
-    <color name="list_row_start_color">#ffffff</color>
-    <color name="list_row_end_color">#ffffff</color>
-    <color name="list_row_hover_start_color">#ebeef0</color>
-    <color name="list_row_hover_end_color">#ebeef0</color>
+    <color name="list_row">#ffffff</color>
+    <color name="list_row_hover">#ebeef0</color>
+
 </resources>

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp" />
-        <!--android:background="@drawable/list_row_selector"-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp" >
+<!--android:background="@drawable/list_row_selector"-->
         <!-- Thumbnail Image -->
         <ImageView
             android:id="@+id/thumbnail"
@@ -28,7 +24,7 @@
 
         <!-- Category -->
         <TextView
-            android:id="@+id/rating"
+            android:id="@+id/category"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/title"
@@ -38,23 +34,23 @@
 
         <!-- Date -->
         <TextView
-            android:id="@+id/genre"
+            android:id="@+id/date"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rating"
+            android:layout_below="@id/category"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/thumbnail"
-            android:textColor="@color/date"
+            android:textColor="@color/list_date"
             android:textSize="@dimen/date" />
 
         <!-- Participants -->
         <TextView
-            android:id="@+id/releaseYear"
+            android:id="@+id/participants"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:textColor="@color/participants"
+            android:textColor="@color/list_participants"
             android:textSize="@dimen/participants" />
 
-</LinearLayout>
+</RelativeLayout>

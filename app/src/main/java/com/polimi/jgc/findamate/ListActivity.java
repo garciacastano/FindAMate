@@ -5,7 +5,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.ListView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,10 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import java.util.ArrayList
 import android.widget.TextView;
 
-public class ListActivity extends AppCompatActivity {
+import com.polimi.jgc.findamate.dummy.DummyContent;
+
+public class ListActivity extends AppCompatActivity implements ActivityItemFragment.OnListFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -88,6 +88,9 @@ public class ListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onActivitySelected(ActivityItem item) {
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -120,12 +123,9 @@ public class ListActivity extends AppCompatActivity {
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
-            ArrayList<ActivityItem> listActivities = GetListActivities();
-            ListView lv = (ListView) rootView.findViewById(R.id.lv_activities);
-            lv.setAdapter(new ListviewActivityAdapter(getActivity(), listActivities));
-
             return rootView;
         }
+
     }
 
     /**
@@ -142,7 +142,13 @@ public class ListActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    return ActivityItemFragment.newInstance(position+1);
+                case 1:
+                    return ListActivity.PlaceholderFragment.newInstance(position + 1);
+            }
+            return ListActivity.PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
@@ -162,4 +168,5 @@ public class ListActivity extends AppCompatActivity {
             return null;
         }
     }
+
 }
