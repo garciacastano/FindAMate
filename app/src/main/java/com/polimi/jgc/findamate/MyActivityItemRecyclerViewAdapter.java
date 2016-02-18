@@ -68,10 +68,5 @@ public class MyActivityItemRecyclerViewAdapter extends RecyclerView.Adapter<MyAc
             mCategory = (TextView) view.findViewById(R.id.list_category);
             mDate = (TextView) view.findViewById(R.id.list_date);
         }
-
-        /**@Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }*/
     }
 }
