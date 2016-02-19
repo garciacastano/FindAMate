@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/list_row"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+
+    <!--  ListRow Left sied Thumbnail image -->
+    <LinearLayout android:id="@+id/interestactivity_item_thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp">
+
+        <ImageView
+            android:id="@+id/interestactivity_item_image"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:src="@drawable/sport_64"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <!-- Title -->
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/interestactivity_item_checkbox"
+        android:layout_marginRight="0dp"
+        android:layout_centerVertical="true"
+        android:textAlignment="center"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:checked="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/interestactivity_item_name"
+        android:textSize="18dp"
+        android:textColor="@color/list_title"
+        android:textAlignment="center"
+        android:layout_weight="1.32"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>
