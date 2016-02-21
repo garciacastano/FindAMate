@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.R;
+import com.polimi.jgc.findamate.util.ActivityDownloader;
+import com.polimi.jgc.findamate.model.Defaults;
 
 
 public class ListActivitiesActivity extends AppCompatActivity implements ActivityItemFragment.OnListFragmentInteractionListener {
@@ -32,8 +34,7 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private static final String ARG_YOUR_INTERESTS = "your_interests";
-    private static final String ARG_ALL_INTERESTS = "all_interests";
+
     Context context;
 
     /**
@@ -91,18 +92,6 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
 
     }
 
-    public static void setPreferences(String key, String value, Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(key, value);
-        editor.commit();
-    }
-
-    public static String getPreferences (String key, Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getString(key, null);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -126,6 +115,9 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
     }
 
     public void onActivitySelected(ActivityItem item) {
+        Intent intent = new Intent(this, DetailsActivity.class);
+        intent.putExtra(Defaults.ACTIVITY_ID, item.getId());
+        startActivity(intent);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -140,11 +132,11 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return ActivityItemFragment.newInstance(ARG_YOUR_INTERESTS);
+                    return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_INTERESTS);
                 case 1:
-                    return ActivityItemFragment.newInstance(ARG_ALL_INTERESTS);
+                    return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_ACTIVITIES);
             }
-            return ActivityItemFragment.newInstance(ARG_YOUR_INTERESTS);
+            return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_INTERESTS);
         }
 
         @Override
@@ -159,7 +151,7 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
                 case 0:
                     return "YOUR INTERESTS";
                 case 1:
-                    return "ALL";
+                    return "YOUR ACTIVITIES";
             }
             return null;
         }

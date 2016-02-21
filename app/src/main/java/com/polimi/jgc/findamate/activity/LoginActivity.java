@@ -56,7 +56,7 @@ public class LoginActivity extends Activity
               {
                 super.handleResponse( currentUser );
                 Backendless.UserService.setCurrentUser( currentUser );
-                startActivity( new Intent( getBaseContext(), LoginSuccessActivity.class ) );
+                startActivity( new Intent( getBaseContext(), ListActivitiesActivity.class ) );
                 finish();
               }
             } );
@@ -156,7 +156,7 @@ public class LoginActivity extends Activity
       public void handleResponse( BackendlessUser backendlessUser )
       {
         super.handleResponse( backendlessUser );
-        startActivity( new Intent( LoginActivity.this, LoginSuccessActivity.class ) );
+        startActivity( new Intent( LoginActivity.this, ListActivitiesActivity.class ) );
         finish();
       }
     }, rememberLogin );
@@ -181,7 +181,7 @@ public class LoginActivity extends Activity
       @Override
       public void handleResponse( BackendlessUser backendlessUser )
       {
-        startActivity( new Intent( getBaseContext(), LoginSuccessActivity.class ) );
+        startActivity( new Intent( getBaseContext(), ListActivitiesActivity.class ) );
         finish();
       }
     } );
@@ -194,7 +194,7 @@ public class LoginActivity extends Activity
       @Override
       public void handleResponse( BackendlessUser backendlessUser )
       {
-        startActivity( new Intent( getBaseContext(), LoginSuccessActivity.class ) );
+        startActivity( new Intent( getBaseContext(), ListActivitiesActivity.class ) );
         finish();
       }
     } );
@@ -207,7 +207,7 @@ public class LoginActivity extends Activity
       @Override
       public void handleResponse( BackendlessUser backendlessUser )
       {
-        startActivity( new Intent( getBaseContext(), LoginSuccessActivity.class ) );
+        startActivity( new Intent( getBaseContext(), ListActivitiesActivity.class ) );
         finish();
       }
     });

@@ -11,7 +11,7 @@ import java.util.Calendar;
 public class ActivityDownloader {
 
     private static final String ARG_YOUR_INTERESTS = "your_interests";
-    private static final String ARG_ALL_INTERESTS = "all_interests";
+    private static final String ARG_YOUR_ACTIVITIES ="your_activities";
 
     public ActivityDownloader(){
     }
@@ -20,13 +20,13 @@ public class ActivityDownloader {
         switch(mode){
             case ARG_YOUR_INTERESTS:
                 return getInterestingActivities();
-            case ARG_ALL_INTERESTS:
-                return getAllActivities();
+            case ARG_YOUR_ACTIVITIES:
+                return getYourActivities();
         }
-        return getAllActivities();
+        return getInterestingActivities();
     }
 
-    private ArrayList<ActivityItem> getAllActivities(){
+    private ArrayList<ActivityItem> getInterestingActivities(){
         ArrayList<ActivityItem> activities = new ArrayList<>();
         ActivityItem activity1 = new ActivityItem();
         ActivityItem activity2 = new ActivityItem();
@@ -96,7 +96,7 @@ public class ActivityDownloader {
         return activities;
     }
 
-    private ArrayList<ActivityItem> getInterestingActivities(){
+    private ArrayList<ActivityItem> getYourActivities(){
         ArrayList<ActivityItem> activities = new ArrayList<>();
         ActivityItem activity1 = new ActivityItem();
         ActivityItem activity6 = new ActivityItem();
@@ -129,5 +129,21 @@ public class ActivityDownloader {
         activities.add(activity9);
 
         return activities;
+    }
+
+    public ActivityItem getActivityDetails(String id){
+        ActivityItem activity1 = new ActivityItem();
+        Calendar calendar = Calendar.getInstance();
+        activity1.setDate(calendar);
+        activity1.setAssistants(13);
+        activity1.setCategory("SPORTS");
+        activity1.setTitle("Partido futbol 11");
+        activity1.setDescription("El rey se ha dirigido a los invitados fundamentalmente en inglés, si bien con algunas frases en castellano y en catalán, idioma en el que ha recordado que la consideración de Barcelona como \"capital mundial del móvil\" es fruto de la \"suma de esfuerzos y voluntades\" entre las Administraciones y entidades implicadas. Tras citar entre ellas al Ayuntamiento de Barcelona, la Generalitat de Cataluña y el Ministerio de Industria, el monarca ha recalcado que \"este es el camino para garantizar la prosperidad de todos: trabajar juntos teniendo siempre como fin el bien común\".\n" +
+                "\n" +
+                "Ver más en: http://www.20minutos.es/noticia/2679076/0/rey-felipe/carles-puigdemont/encuentro-cena-barcelona/#xtor=AD-15&xts=467263");
+        activity1.setLatitude(45.4764869);
+        activity1.setLongitude(9.2241113);
+        activity1.setParticipants(22);
+        return activity1;
     }
 }
