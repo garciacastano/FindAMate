@@ -7,6 +7,7 @@ import java.util.Date;
  * Created by JGC on 17/02/2016.
  */
 public class ActivityItem {
+    private String id;
     private String title;
     private String description;
     private String category;
@@ -18,8 +19,9 @@ public class ActivityItem {
 
     public ActivityItem() {}
 
-    public ActivityItem(String title, String description, String category, Calendar date,
+    public ActivityItem(String id, String title, String description, String category, Calendar date,
                         int participants, int assistants, double latitude, double longitude) {
+        this.id=id;
         this.title = title;
         this.description = description;
         this.category = category;
@@ -28,6 +30,10 @@ public class ActivityItem {
         this.assistants = assistants;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public String getId (){
+        return id;
     }
 
     public String getTitle() {
