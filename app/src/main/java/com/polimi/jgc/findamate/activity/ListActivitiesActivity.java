@@ -19,7 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.R;
-import com.polimi.jgc.findamate.util.ActivityDownloader;
+
 import com.polimi.jgc.findamate.model.Defaults;
 
 
@@ -64,7 +64,7 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.cast_notification_id);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,5 +1,9 @@
 package com.polimi.jgc.findamate.util;
 
+import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.persistence.BackendlessDataQuery;
 import com.polimi.jgc.findamate.model.ActivityItem;
 
 import java.util.ArrayList;
@@ -8,12 +12,12 @@ import java.util.Calendar;
 /**
  * Created by JGC on 18/02/2016.
  */
-public class ActivityDownloader {
+public class ActivityManager {
 
     private static final String ARG_YOUR_INTERESTS = "your_interests";
     private static final String ARG_YOUR_ACTIVITIES ="your_activities";
 
-    public ActivityDownloader(){
+    public ActivityManager(){
     }
 
     public ArrayList<ActivityItem> getListActivities(String mode){
@@ -42,55 +46,55 @@ public class ActivityDownloader {
         activity1.setParticipants(22);
         activity1.setCategory("SPORTS");
         Calendar calendar = Calendar.getInstance();
-        activity1.setDate(calendar);
+        activity1.setDate_(calendar.getTime());
         activities.add(activity1);
 
         activity2.setTitle("Partida de Call Of Duty");
         activity2.setParticipants(10);
         activity2.setCategory("VIDEOGAMES");
-        activity2.setDate(calendar);
+        activity2.setDate_(calendar.getTime());
         activities.add(activity2);
 
         activity3.setTitle("Monopoly");
         activity3.setParticipants(4);
         activity3.setCategory("BOARD GAMES");
-        activity3.setDate(calendar);
+        activity3.setDate_(calendar.getTime());
         activities.add(activity3);
 
         activity4.setTitle("Ajedrez");
         activity4.setParticipants(2);
         activity4.setCategory("BOARD GAMES");
-        activity4.setDate(calendar);
+        activity4.setDate_(calendar.getTime());
         activities.add(activity4);
 
         activity5.setTitle("Just Dance");
         activity5.setParticipants(4);
         activity5.setCategory("VIDEOGAMES");
-        activity5.setDate(calendar);
+        activity5.setDate_(calendar.getTime());
         activities.add(activity5);
 
         activity6.setTitle("Basket");
         activity6.setParticipants(10);
         activity6.setCategory("SPORTS");
-        activity6.setDate(calendar);
+        activity6.setDate_(calendar.getTime());
         activities.add(activity6);
 
         activity7.setTitle("Raid del WOW");
         activity7.setParticipants(25);
         activity7.setCategory("VIDEOGAMES");
-        activity7.setDate(calendar);
+        activity7.setDate_(calendar.getTime());
         activities.add(activity7);
 
         activity8.setTitle("Tennis");
         activity8.setParticipants(4);
         activity8.setCategory("SPORTS");
-        activity8.setDate(calendar);
+        activity8.setDate_(calendar.getTime());
         activities.add(activity8);
 
         activity9.setTitle("Partido de futbol 5");
         activity9.setParticipants(10);
         activity9.setCategory("SPORTS");
-        activity9.setDate(calendar);
+        activity9.setDate_(calendar.getTime());
         activities.add(activity9);
 
         return activities;
@@ -107,25 +111,25 @@ public class ActivityDownloader {
         activity1.setParticipants(22);
         activity1.setCategory("SPORTS");
         Calendar calendar = Calendar.getInstance();
-        activity1.setDate(calendar);
+        activity1.setDate_(calendar.getTime());
         activities.add(activity1);
 
         activity6.setTitle("Basket");
         activity6.setParticipants(10);
         activity6.setCategory("SPORTS");
-        activity6.setDate(calendar);
+        activity6.setDate_(calendar.getTime());
         activities.add(activity6);
 
         activity8.setTitle("Tennis");
         activity8.setParticipants(4);
         activity8.setCategory("SPORTS");
-        activity8.setDate(calendar);
+        activity8.setDate_(calendar.getTime());
         activities.add(activity8);
 
         activity9.setTitle("Partido de futbol 5");
         activity9.setParticipants(10);
         activity9.setCategory("SPORTS");
-        activity9.setDate(calendar);
+        activity9.setDate_(calendar.getTime());
         activities.add(activity9);
 
         return activities;
@@ -134,7 +138,7 @@ public class ActivityDownloader {
     public ActivityItem getActivityDetails(String id){
         ActivityItem activity1 = new ActivityItem();
         Calendar calendar = Calendar.getInstance();
-        activity1.setDate(calendar);
+        activity1.setDate_(calendar.getTime());
         activity1.setAssistants(13);
         activity1.setCategory("SPORTS");
         activity1.setTitle("Partido futbol 11");
@@ -145,5 +149,40 @@ public class ActivityDownloader {
         activity1.setLongitude(9.2241113);
         activity1.setParticipants(22);
         return activity1;
+    }
+
+
+    //BACKENDLESS RETRIEVING METHODS
+
+    public static ActivityItem findById( String id ){
+        return Backendless.Data.of( ActivityItem.class ).findById( id );
+    }
+
+    public static void findByIdAsync( String id, AsyncCallback<ActivityItem> callback ){
+        Backendless.Data.of( ActivityItem.class ).findById( id, callback );
+    }
+
+    public static ActivityItem findFirst(){
+        return Backendless.Data.of( ActivityItem.class ).findFirst();
+    }
+
+    public static void findFirstAsync( AsyncCallback<ActivityItem> callback ){
+        Backendless.Data.of( ActivityItem.class ).findFirst( callback );
+    }
+
+    public static ActivityItem findLast(){
+        return Backendless.Data.of( ActivityItem.class ).findLast();
+    }
+
+    public static void findLastAsync( AsyncCallback<ActivityItem> callback ){
+        Backendless.Data.of( ActivityItem.class ).findLast( callback );
+    }
+
+    public static BackendlessCollection<ActivityItem> find( BackendlessDataQuery query ){
+        return Backendless.Data.of( ActivityItem.class ).find( query );
+    }
+
+    public static void findAsync( BackendlessDataQuery query, AsyncCallback<BackendlessCollection<ActivityItem>> callback ){
+        Backendless.Data.of( ActivityItem.class ).find( query, callback );
     }
 }

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.polimi.jgc.findamate.controller.InterestItemRecyclerViewAdapter;
 import java.util.ArrayList;
 import com.polimi.jgc.findamate.R;
-import com.polimi.jgc.findamate.util.CategoryDownloader;
+import com.polimi.jgc.findamate.util.CategoryManager;
 import com.polimi.jgc.findamate.model.CategoryItem;
 
 /**
@@ -55,7 +55,7 @@ public class InterestItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_interestsactivity_list, container, false);
-        CategoryDownloader categoryDownloader=new CategoryDownloader();
+        CategoryManager categoryDownloader=new CategoryManager();
         ArrayList<CategoryItem> categories = categoryDownloader.getListCategories();
 
         // Set the adapter

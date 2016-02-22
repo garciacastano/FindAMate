@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.polimi.jgc.findamate.model.ActivityItem;
-import com.polimi.jgc.findamate.util.ActivityDownloader;
+import com.polimi.jgc.findamate.util.ActivityManager;
 import com.polimi.jgc.findamate.controller.ActivityItemRecyclerViewAdapter;
 import java.util.ArrayList;
 import com.polimi.jgc.findamate.R;
+
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -55,8 +57,8 @@ public class ActivityItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listactivity_list, container, false);
-        ActivityDownloader activityDownloader=new ActivityDownloader();
-        ArrayList<ActivityItem> activities = activityDownloader.getListActivities(getArguments().getString(ARG_ACTIVITY_MODE));
+        ActivityManager activityManager=new ActivityManager();
+        ArrayList<ActivityItem> activities = activityManager.getListActivities(getArguments().getString(ARG_ACTIVITY_MODE));
 
         // Set the adapter
         if (view instanceof RecyclerView) {

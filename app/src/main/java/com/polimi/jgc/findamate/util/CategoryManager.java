@@ -9,11 +9,11 @@ import java.util.Calendar;
 /**
  * Created by JGC on 18/02/2016.
  */
-public class CategoryDownloader {
+public class CategoryManager {
 
     private final String CATEGORIES[]= {"SPORTS","VIDEOGAMES", "BOARD GAMES", "OUTDOOR GAMES"};
 
-    public CategoryDownloader(){
+    public CategoryManager(){
     }
 
     public ArrayList<CategoryItem> getListCategories(){

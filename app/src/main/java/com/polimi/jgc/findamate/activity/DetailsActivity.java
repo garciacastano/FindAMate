@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.polimi.jgc.findamate.R;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.model.Defaults;
-import com.polimi.jgc.findamate.util.ActivityDownloader;
+import com.polimi.jgc.findamate.util.ActivityManager;
 
 public class DetailsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -38,8 +38,8 @@ public class DetailsActivity extends FragmentActivity implements OnMapReadyCallb
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        ActivityDownloader activityDownloader=new ActivityDownloader();
-        ActivityItem activityItem= activityDownloader.getActivityDetails(getIntent().getStringExtra(Defaults.ACTIVITY_ID));
+        ActivityManager activityManager=new ActivityManager();
+        ActivityItem activityItem= activityManager.getActivityDetails(getIntent().getStringExtra(Defaults.ACTIVITY_ID));
 
         title = (TextView) findViewById(R.id.detail_title);
         title.setText(activityItem.getTitle());

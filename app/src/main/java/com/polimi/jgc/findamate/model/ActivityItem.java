@@ -1,113 +1,143 @@
 package com.polimi.jgc.findamate.model;
 
-import java.util.Calendar;
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+
 import java.util.Date;
 
-/**
- * Created by JGC on 17/02/2016.
- */
-public class ActivityItem {
-    private String id;
-    private String title;
-    private String description;
+
+public class ActivityItem{
+
+    private Date updated;
+    private Integer id;
+    private Date date_;
     private String category;
-    private Calendar date;
+    private String objectId;
+    private String ownerId;
     private double latitude;
+    private Integer participants;
+    private Integer assistants;
+    private Date created;
+    private String title;
     private double longitude;
-    private int participants;
-    private int assistants;
+    private String description;
 
-    public ActivityItem() {}
 
-    public ActivityItem(String id, String title, String description, String category, Calendar date,
-                        int participants, int assistants, double latitude, double longitude) {
-        this.id=id;
-        this.title = title;
-        this.description = description;
-        this.category = category;
-        this.date = date;
-        this.participants = participants;
-        this.assistants = assistants;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    //GETTERS AND SETTERS
+    public Date getUpdated(){
+        return updated;
     }
 
-    public String getId (){
+    public Integer getId(){
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    public void setId( Integer id ){
+        this.id = id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public Date getDate_(){
+        return date_;
     }
 
-    public String getDescription() {
-        return description;
+    public void setDate_( Date date_ ){
+        this.date_ = date_;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCategory() {
+    public String getCategory(){
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory( String category ){
         this.category = category;
     }
 
-    public Calendar getDate() {
-        return date;
+    public String getObjectId(){
+        return objectId;
     }
 
-    public String getDayMonthYear() {
-        if(date.get(Calendar.AM_PM)==Calendar.PM){
-            return date.get(Calendar.HOUR)+12+":"+date.get(Calendar.MINUTE)+" - "+date.get(Calendar.DAY_OF_MONTH)+
-                    "/"+(int)date.get(Calendar.MONTH)+1+"/"+date.get(Calendar.YEAR);
-        }
-
-        return date.get(Calendar.HOUR)+":"+date.get(Calendar.MINUTE)+" - "+date.get(Calendar.DAY_OF_MONTH)+
-                "/"+date.get(Calendar.MONTH)+1+"/"+date.get(Calendar.YEAR);
+    public String getOwnerId(){
+        return ownerId;
     }
 
-    public void setDate(Calendar date) {
-        this.date = date;
-    }
-
-    public int getParticipants() {
-        return participants;
-    }
-
-    public void setParticipants(int participants) {
-        this.participants = participants;
-    }
-
-    public int getAssistants() {
-        return assistants;
-    }
-
-    public void setAssistants(int assistants) {
-        this.assistants = assistants;
-    }
-
-    public double getLatitude() {
+    public double getLatitude(){
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude( double latitude ){
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public Integer getParticipants(){
+        return participants;
+    }
+
+    public void setParticipants( Integer participants ){
+        this.participants = participants;
+    }
+
+    public Integer getAssistants(){
+        return assistants;
+    }
+
+    public void setAssistants( Integer assistants ){
+        this.assistants = assistants;
+    }
+
+    public Date getCreated(){
+        return created;
+    }
+
+    public String getTitle(){
+        return title;
+    }
+
+    public void setTitle( String title ){
+        this.title = title;
+    }
+
+    public Double getLongitude(){
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude( Double longitude ){
         this.longitude = longitude;
     }
+
+    public String getDescription(){
+        return description;
+    }
+
+    public void setDescription( String description ){
+        this.description = description;
+    }
+
+    public String getDayMonthYear() {
+        int month=date_.getMonth()+1;
+        return date_.getHours()+":"+date_.getMinutes()+" - "+date_.getMonth()+
+                                "/"+month+"/"+date_.getYear();
+    }
+
+    //BACKENDLESS SAVING METHODS
+
+    public ActivityItem save(){
+        return Backendless.Data.of( ActivityItem.class ).save( this );
+    }
+
+    public void saveAsync( AsyncCallback<ActivityItem> callback )
+    {
+        Backendless.Data.of( ActivityItem.class ).save( this, callback );
+    }
+
+    //BACKENDLESS REMOVING METHODS
+
+    public Long remove(){
+        return Backendless.Data.of( ActivityItem.class ).remove( this );
+    }
+
+    public void removeAsync( AsyncCallback<Long> callback ){
+        Backendless.Data.of( ActivityItem.class ).remove( this, callback );
+    }
 }
+
 
