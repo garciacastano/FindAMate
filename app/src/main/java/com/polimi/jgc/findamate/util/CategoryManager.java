@@ -11,7 +11,7 @@ import java.util.Calendar;
  */
 public class CategoryManager {
 
-    private final String CATEGORIES[]= {"SPORTS","VIDEOGAMES", "BOARD GAMES", "OUTDOOR GAMES"};
+    private final String CATEGORIES[]= {"SOCCER", "VOLLEY", "RUGBY", "TENNIS", "TABLE_TENNIS", "BASKET"};
 
     public CategoryManager(){
     }

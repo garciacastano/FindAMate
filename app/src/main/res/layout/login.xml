@@ -116,7 +116,8 @@
                 android:id="@+id/rememberLoginBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/remember_login_text"/>
+                android:text="@string/remember_login_text"
+                android:visibility="invisible" />
         </TableRow>
     </TableLayout>
 

@@ -1,7 +1,9 @@
 package com.polimi.jgc.findamate.model;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
+import com.backendless.persistence.BackendlessDataQuery;
 
 import java.util.Date;
 
@@ -9,15 +11,14 @@ import java.util.Date;
 public class ActivityItem{
 
     private Date updated;
-    private Integer id;
     private Date date_;
+    private Date created;
     private String category;
     private String objectId;
     private String ownerId;
     private double latitude;
     private Integer participants;
     private Integer assistants;
-    private Date created;
     private String title;
     private double longitude;
     private String description;
@@ -26,14 +27,6 @@ public class ActivityItem{
     //GETTERS AND SETTERS
     public Date getUpdated(){
         return updated;
-    }
-
-    public Integer getId(){
-        return id;
-    }
-
-    public void setId( Integer id ){
-        this.id = id;
     }
 
     public Date getDate_(){
@@ -112,10 +105,37 @@ public class ActivityItem{
         this.description = description;
     }
 
-    public String getDayMonthYear() {
-        int month=date_.getMonth()+1;
-        return date_.getHours()+":"+date_.getMinutes()+" - "+date_.getMonth()+
-                                "/"+month+"/"+date_.getYear();
+    public String getDateToString(String mode){
+        Date date;
+        switch (mode){
+            case Defaults.DETAILS_CREATED:
+                date=created;
+                break;
+            case Defaults.DETAILS_UPDATED:
+                if(updated == null){
+                    date=created;
+                }
+                else{
+                    date=updated;
+                }
+                break;
+            case Defaults.DETAILS_DATE:
+                date=date_;
+                break;
+            default:
+                return "Error on method getDateToString";
+        }
+        int month=date.getMonth()+1;
+        int year=date.getYear()+1900;
+        String minutes;
+        if(date.getMinutes()<10){
+            minutes="0"+date.getMinutes();
+        }
+        else{
+            minutes="0"+date.getMinutes();
+        }
+        return date.getHours()+":"+minutes+" - "+date.getDate()+
+                "/"+month+"/"+year;
     }
 
     //BACKENDLESS SAVING METHODS
@@ -138,6 +158,41 @@ public class ActivityItem{
     public void removeAsync( AsyncCallback<Long> callback ){
         Backendless.Data.of( ActivityItem.class ).remove( this, callback );
     }
+
+    //BACKENDLESS RETRIEVING METHODS
+
+    public static ActivityItem findById( String id ){
+        return Backendless.Data.of( ActivityItem.class ).findById( id );
+    }
+
+    public static void findByIdAsync( String id, AsyncCallback<ActivityItem> callback ){
+        Backendless.Data.of( ActivityItem.class ).findById( id, callback );
+    }
+
+    public static ActivityItem findFirst(){
+        return Backendless.Data.of( ActivityItem.class ).findFirst();
+    }
+
+    public static void findFirstAsync( AsyncCallback<ActivityItem> callback ){
+        Backendless.Data.of( ActivityItem.class ).findFirst( callback );
+    }
+
+    public static ActivityItem findLast(){
+        return Backendless.Data.of( ActivityItem.class ).findLast();
+    }
+
+    public static void findLastAsync( AsyncCallback<ActivityItem> callback ){
+        Backendless.Data.of( ActivityItem.class ).findLast(callback);
+    }
+
+    public static BackendlessCollection<ActivityItem> find( BackendlessDataQuery query ){
+        return Backendless.Data.of( ActivityItem.class ).find(query);
+    }
+
+    public static void findAsync( BackendlessDataQuery query, AsyncCallback<BackendlessCollection<ActivityItem>> callback ){
+        Backendless.Data.of( ActivityItem.class ).find(query, callback);
+    }
+
 }
 
 

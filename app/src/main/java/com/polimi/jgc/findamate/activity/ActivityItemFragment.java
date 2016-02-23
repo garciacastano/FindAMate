@@ -1,18 +1,30 @@
 package com.polimi.jgc.findamate.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
+import com.backendless.async.callback.BackendlessCallback;
+import com.backendless.persistence.BackendlessDataQuery;
 import com.polimi.jgc.findamate.model.ActivityItem;
+import com.polimi.jgc.findamate.model.Defaults;
 import com.polimi.jgc.findamate.util.ActivityManager;
 import com.polimi.jgc.findamate.controller.ActivityItemRecyclerViewAdapter;
 import java.util.ArrayList;
+import java.util.List;
+
 import com.polimi.jgc.findamate.R;
+import com.polimi.jgc.findamate.util.DefaultCallback;
 
 
 /**
@@ -21,15 +33,13 @@ import com.polimi.jgc.findamate.R;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
+
 public class ActivityItemFragment extends Fragment {
 
-    private static final String ARG_ACTIVITY_MODE = "activity_mode";
     private OnListFragmentInteractionListener mListener;
+    private List<ActivityItem> activities;
+    private RecyclerView recyclerView;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public ActivityItemFragment() {
     }
 
@@ -37,7 +47,7 @@ public class ActivityItemFragment extends Fragment {
     public static ActivityItemFragment newInstance(String mode) {
         ActivityItemFragment fragment = new ActivityItemFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_ACTIVITY_MODE, mode);
+        args.putString(Defaults.ARG_ACTIVITY_MODE, mode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,6 +56,8 @@ public class ActivityItemFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         onSaveInstanceState(savedInstanceState);
         super.onCreate(savedInstanceState);
+        activities = new ArrayList<>();
+        downloadData();
     }
 
     @Override
@@ -57,19 +69,11 @@ public class ActivityItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listactivity_list, container, false);
-        ActivityManager activityManager=new ActivityManager();
-        ArrayList<ActivityItem> activities = activityManager.getListActivities(getArguments().getString(ARG_ACTIVITY_MODE));
-
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new ActivityItemRecyclerViewAdapter(activities, mListener));
-        }
+        Context context = view.getContext();
+        recyclerView = (RecyclerView) view;
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
         return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -100,5 +104,41 @@ public class ActivityItemFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         void onActivitySelected(ActivityItem item);
+    }
+
+    private void downloadData() {
+        BackendlessDataQuery query = new BackendlessDataQuery();
+        switch (getArguments().getString(Defaults.ARG_ACTIVITY_MODE)) {
+            case Defaults.ARG_YOUR_INTERESTS:
+                query.setWhereClause("category = 'SOCCER'");
+                ActivityItem.findAsync(query, new DefaultCallback<BackendlessCollection<ActivityItem>>(getActivity()) {
+                    @Override
+                    public void handleResponse(BackendlessCollection<ActivityItem> response) {
+                        super.handleResponse(response);
+                        activities = response.getData();
+                        Log.d("RETRIEVE DATA", "Activities SOCCER = " + activities.size());
+                        ActivityItemRecyclerViewAdapter adapter = new ActivityItemRecyclerViewAdapter(activities, mListener);
+                        recyclerView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+
+                    }
+                });
+                break;
+
+            case Defaults.ARG_YOUR_ACTIVITIES:
+                query.setWhereClause("ownerId = 'jorge@jorge.jorge'");
+                ActivityItem.findAsync(query, new DefaultCallback<BackendlessCollection<ActivityItem>>(getActivity()) {
+                    @Override
+                    public void handleResponse(BackendlessCollection<ActivityItem> response) {
+                        super.handleResponse(response);
+                        activities = response.getData();
+                        Log.d("RETRIEVE DATA", "Activities de jorge = " + activities.size());
+                        ActivityItemRecyclerViewAdapter adapter = new ActivityItemRecyclerViewAdapter(activities, mListener);
+                        recyclerView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                break;
+        }
     }
 }

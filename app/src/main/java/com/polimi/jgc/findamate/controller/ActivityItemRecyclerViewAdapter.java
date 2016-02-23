@@ -8,7 +8,9 @@ import android.widget.TextView;
 import com.polimi.jgc.findamate.R;
 import com.polimi.jgc.findamate.activity.ActivityItemFragment.OnListFragmentInteractionListener;
 import com.polimi.jgc.findamate.model.ActivityItem;
-import java.util.ArrayList;
+import com.polimi.jgc.findamate.model.Defaults;
+
+import java.util.List;
 
 
 /**
@@ -17,10 +19,10 @@ import java.util.ArrayList;
  **/
 public class ActivityItemRecyclerViewAdapter extends RecyclerView.Adapter<ActivityItemRecyclerViewAdapter.ViewHolder> {
 
-    private final ArrayList<ActivityItem> mValues;
+    private final List<ActivityItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public ActivityItemRecyclerViewAdapter(ArrayList<ActivityItem> items, OnListFragmentInteractionListener listener) {
+    public ActivityItemRecyclerViewAdapter(List<ActivityItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,7 +39,7 @@ public class ActivityItemRecyclerViewAdapter extends RecyclerView.Adapter<Activi
         holder.mItem = mValues.get(position);
         holder.mTitle.setText(mValues.get(position).getTitle());
         holder.mCategory.setText(mValues.get(position).getCategory());
-        holder.mDate.setText(mValues.get(position).getDayMonthYear());
+        holder.mDate.setText(mValues.get(position).getDateToString(Defaults.DETAILS_DATE));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +55,7 @@ public class ActivityItemRecyclerViewAdapter extends RecyclerView.Adapter<Activi
 
     @Override
     public int getItemCount() {
+        if(mValues==null) return 0 ;
         return mValues.size();
     }
 

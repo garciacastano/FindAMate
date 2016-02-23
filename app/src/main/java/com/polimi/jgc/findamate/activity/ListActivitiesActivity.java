@@ -1,6 +1,5 @@
 package com.polimi.jgc.findamate.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -16,11 +15,13 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import com.backendless.Backendless;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.R;
-
 import com.polimi.jgc.findamate.model.Defaults;
+import com.polimi.jgc.findamate.util.UserSessionManager;
+
+import java.util.HashMap;
 
 
 public class ListActivitiesActivity extends AppCompatActivity implements ActivityItemFragment.OnListFragmentInteractionListener {
@@ -35,16 +36,12 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    Context context;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
 
-    /**public ListActivitiesActivity(Context context){
-        this.context=context;
-    }**/
+    UserSessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,37 +61,47 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.cast_notification_id);
+        Backendless.setUrl(Defaults.SERVER_URL);
+        Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
+
+        session = new UserSessionManager(getApplicationContext());
+
+        if(!session.checkLogin()){
+            finish();
+        }
+
+        //Obtain data from session
+        /**HashMap<String, String> user = session.getUserDetails();
+        String name = user.get(Defaults.KEY_NAME);
+        String email = user.get(Defaults.KEY_NAME);**/
+
+        Snackbar.make(mViewPager, "Welcome "+session.getUserDetails().get(Defaults.KEY_NAME), Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+
+        //TODO añadir actividad
+
+        /**FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.cast_notification_id);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
-
-        context=getApplicationContext();
+        });**/
 
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean Islogin = prefs.getBoolean("Islogin", false); // get value of last login status
-
-        if(!Islogin){   // condition true means user is already login
-            /**Intent i = new Intent(this, LoginActivityAsyncTask.class);
-            startActivityForResult(i, 1);**/
-        }
-        else{
+        if(!session.checkLogin()){
+            finish();
         }
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_list, menu);
         return true;
     }
@@ -105,9 +112,13 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.string.logout) {
+            session.logoutUser();
             return true;
         }
 
@@ -116,7 +127,16 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
 
     public void onActivitySelected(ActivityItem item) {
         Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra(Defaults.ACTIVITY_ID, item.getId());
+        intent.putExtra(Defaults.DETAILS_TITLE, item.getTitle());
+        intent.putExtra(Defaults.DETAILS_CATEGORY, item.getCategory());
+        intent.putExtra(Defaults.DETAILS_DATE, item.getDateToString(Defaults.DETAILS_DATE));
+        intent.putExtra(Defaults.DETAILS_PARTICIPANTS, item.getParticipants());
+        intent.putExtra(Defaults.DETAILS_OWNERID, item.getOwnerId());
+        intent.putExtra(Defaults.DETAILS_LATITUDE, item.getLatitude());
+        intent.putExtra(Defaults.DETAILS_LONGITUDE, item.getLongitude());
+        intent.putExtra(Defaults.DETAILS_CREATED, item.getDateToString(Defaults.DETAILS_CREATED));
+        intent.putExtra(Defaults.DETAILS_UPDATED, item.getDateToString(Defaults.DETAILS_UPDATED));
+        intent.putExtra(Defaults.DETAILS_DESCRIPTION, item.getDescription());
         startActivity(intent);
     }
 

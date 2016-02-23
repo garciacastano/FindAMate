@@ -19,7 +19,7 @@
     <string name="password_recovered_message">We sent an email to your email address with a link to a password change page. Please check your email and follow the link for further instructions.</string>
     <string name="restore_password_page_name">Password Restoration</string>
     <string name="registration_page_name">Registration</string>
-    <string name="login_prompt">Login:</string>
+    <string name="login_prompt">Email:</string>
     <string name="password_prompt">Password:</string>
     <string name="password_recovery_page_name">Password Recovery</string>
     <string name="warning_icon_description">warning icon</string>
@@ -59,6 +59,7 @@
     </string>
 
     <string name="pref_title_display_name">Your name</string>
+    <string name="logout">Logout</string>
     <string name="pref_default_username">John Smith</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>

@@ -32,19 +32,22 @@ public class RegisterActivity extends Activity
   private String login;
   private String name;
   private String password;
-
   private User user;
 
-  public void onCreate( Bundle savedInstanceState )
-  {
+  public void onCreate( Bundle savedInstanceState ){
     super.onCreate( savedInstanceState );
     setContentView( R.layout.register );
 
     initUI();
   }
 
-  private void initUI()
-  {dateofbirthField = (EditText) findViewById( R.id.dateofbirthField );emailField = (EditText) findViewById( R.id.emailField );genderField = (EditText) findViewById( R.id.genderField );loginField = (EditText) findViewById( R.id.loginField );nameField = (EditText) findViewById( R.id.nameField );passwordField = (EditText) findViewById( R.id.passwordField );
+  private void initUI(){
+    dateofbirthField = (EditText) findViewById( R.id.dateofbirthField );
+    emailField = (EditText) findViewById( R.id.emailField );
+    genderField = (EditText) findViewById( R.id.genderField );
+    loginField = (EditText) findViewById( R.id.loginField );
+    nameField = (EditText) findViewById( R.id.nameField );
+    passwordField = (EditText) findViewById( R.id.passwordField );
 
     registerButton = (Button) findViewById( R.id.registerButton );
 
@@ -78,8 +81,7 @@ public class RegisterActivity extends Activity
     } );
   }
 
-  private void onRegisterButtonClicked()
-  {
+  private void onRegisterButtonClicked(){
     String dateofbirthText = dateofbirthField.getText().toString().trim();
     String emailText = emailField.getText().toString().trim();
     String genderText = genderField.getText().toString().trim();
@@ -87,93 +89,76 @@ public class RegisterActivity extends Activity
     String nameText = nameField.getText().toString().trim();
     String passwordText = passwordField.getText().toString().trim();
 
-    if ( emailText.isEmpty() )
-    {
+    if ( emailText.isEmpty() ){
       showToast( "Field 'email' cannot be empty." );
       return;
     }
 
-    if ( passwordText.isEmpty() )
-    {
+    if ( passwordText.isEmpty() ){
       showToast( "Field 'password' cannot be empty." );
       return;
     }
 
-    if( !dateofbirthText.isEmpty() )
-    {
-      try
-      {
+    if( !dateofbirthText.isEmpty() ){
+      try{
         dateofbirth = SIMPLE_DATE_FORMAT.parse( dateofbirthText );
       }
-      catch( java.text.ParseException e )
-      {
+      catch( java.text.ParseException e ){
         showToast( e.getMessage() );
         return;
       }
     }
 
-    if( !emailText.isEmpty() )
-    {
+    if( !emailText.isEmpty() ){
       email = emailText;
     }
 
-    if( !genderText.isEmpty() )
-    {
+    if( !genderText.isEmpty() ){
       gender = genderText;
     }
 
-    if( !loginText.isEmpty() )
-    {
+    if( !loginText.isEmpty() ){
       login = loginText;
     }
 
-    if( !nameText.isEmpty() )
-    {
+    if( !nameText.isEmpty() ){
       name = nameText;
     }
 
-    if( !passwordText.isEmpty() )
-    {
+    if( !passwordText.isEmpty() ){
       password = passwordText;
     }
 
     user = new User();
 
-    if( dateofbirth != null )
-    {
+    if( dateofbirth != null ){
       user.setDateofbirth( dateofbirth );
     }
 
-    if( email != null )
-    {
+    if( email != null ){
       user.setEmail( email );
     }
 
-    if( gender != null )
-    {
+    if( gender != null ){
       user.setGender( gender );
     }
 
-    if( login != null )
-    {
+    if( login != null ){
       user.setLogin( login );
     }
 
-    if( name != null )
-    {
+    if( name != null ){
       user.setName( name );
     }
 
-    if( password != null )
-    {
+    if( password != null ){
       user.setPassword( password );
     }
 
     Backendless.UserService.register( user, new DefaultCallback<BackendlessUser>( RegisterActivity.this )
     {
       @Override
-      public void handleResponse( BackendlessUser response )
-      {
+      public void handleResponse( BackendlessUser response ){
         super.handleResponse( response );
         startActivity( new Intent( RegisterActivity.this, RegistrationSuccessActivity.class ) );
         finish();
