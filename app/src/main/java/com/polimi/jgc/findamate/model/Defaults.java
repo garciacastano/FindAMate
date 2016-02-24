@@ -15,9 +15,12 @@ public class Defaults {
   public static final String DETAILS_LONGITUDE ="details_longitude";
   public static final String ARG_ACTIVITY_MODE = "activity_mode";
   public static final String DETAILS_PARTICIPANTS = "details_participannts";
+  public static final String DETAILS_ASSISTANTS = "details_participannts";
   public static final String DETAILS_OWNERID = "details_ownerid";
   public static final String DETAILS_CREATED = "details_created";
   public static final String DETAILS_UPDATED = "details_updates";
+  public static final String DETAILS_CURRENTPLAYERS = "details_currentplayers";
+  public static final String DETAILS_PLAYERSNEEDED = "details_playersneeded";
 
   //UserSessionManager final constants
   public static int PRIVATE_MODE = 0;
@@ -25,4 +28,11 @@ public class Defaults {
   public static final String IS_USER_LOGIN = "IsUserLoggedIn";
   public static final String KEY_NAME = "name";
   public static final String KEY_EMAIL = "email";
+
+  //NewActivity final constants
+  public static final int INSERT_OK = 1;
+  public static final int INSERT_FAILED = 0;
+  public static final int ADD_ACTIVITY = 2;
+
+  public final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat( "yyyy/MM/dd" );
 }

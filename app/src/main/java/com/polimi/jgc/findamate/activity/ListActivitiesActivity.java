@@ -1,11 +1,13 @@
 package com.polimi.jgc.findamate.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
@@ -13,14 +15,23 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
 import com.backendless.Backendless;
+import com.backendless.exceptions.BackendlessFault;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.R;
 import com.polimi.jgc.findamate.model.Defaults;
+import com.polimi.jgc.findamate.util.DefaultCallback;
 import com.polimi.jgc.findamate.util.UserSessionManager;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -40,24 +51,20 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-
+    Context context;
     UserSessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listactivity_activity);
-
+        context=this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -75,29 +82,59 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
         String name = user.get(Defaults.KEY_NAME);
         String email = user.get(Defaults.KEY_NAME);**/
 
-        Snackbar.make(mViewPager, "Welcome "+session.getUserDetails().get(Defaults.KEY_NAME), Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-
-        //TODO añadir actividad
-
-        /**FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.cast_notification_id);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.newActivity);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivityForResult(new Intent(context, NewActivity.class), Defaults.ADD_ACTIVITY);
             }
-        });**/
+        });
 
+        Snackbar.make(mViewPager, "Welcome "+session.getUserDetails().get(Defaults.KEY_NAME), Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     @Override
     public void onResume(){
         super.onResume();
+
         if(!session.checkLogin()){
             finish();
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Defaults.ADD_ACTIVITY) {
+            Bundle bundle = data.getExtras();
+            ActivityItem activityItem = new ActivityItem();
+            activityItem.setCategory(bundle.getString(Defaults.DETAILS_CATEGORY));
+            activityItem.setDescription(bundle.getString(Defaults.DETAILS_DESCRIPTION));
+            activityItem.setTitle(bundle.getString(Defaults.DETAILS_TITLE));
+            Date d;
+            try{
+                d = Defaults.SIMPLE_DATE_FORMAT.parse(bundle.getString(Defaults.DETAILS_DATE));
+                activityItem.setDate_(d);
+            }catch (ParseException e) {
+                Log.d("PARSE EXCEPTION", "PARSE EXCEPTION");
+            }
+
+            activityItem.setParticipants(bundle.getInt(Defaults.DETAILS_PARTICIPANTS));
+            activityItem.setAssistants(bundle.getInt(Defaults.DETAILS_ASSISTANTS));
+            activityItem.setCategory(bundle.getString(Defaults.DETAILS_CATEGORY));
+            activityItem.setOwnerId(session.getUserDetails().get(Defaults.KEY_EMAIL));
+            activityItem.saveAsync(new DefaultCallback<ActivityItem>(this) {
+
+                @Override
+                public void handleResponse(ActivityItem response) {
+                    super.handleResponse(response);
+                    refreshActivities();
+                    Snackbar.make(mViewPager, "The activity '"+response.getTitle()+"' was succesfully published", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+        }
     }
 
     @Override
@@ -108,17 +145,17 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
+        if (id == R.id.refresh_activities) {
+            refreshActivities();
+            return true;
+        }
         if (id == R.id.action_settings) {
             return true;
         }
-
-        if (id == R.string.logout) {
+        if (id == R.id.logout) {
             session.logoutUser();
+            finish();
             return true;
         }
 
@@ -138,6 +175,12 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
         intent.putExtra(Defaults.DETAILS_UPDATED, item.getDateToString(Defaults.DETAILS_UPDATED));
         intent.putExtra(Defaults.DETAILS_DESCRIPTION, item.getDescription());
         startActivity(intent);
+    }
+
+    private void refreshActivities(){
+        mSectionsPagerAdapter.notifyDataSetChanged();
+        Snackbar.make(mViewPager, "Activities updated", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -163,6 +206,11 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
         public int getCount() {
             // Show  total pages.
             return 2;
+        }
+
+        @Override
+        public int getItemPosition(Object item){
+            return POSITION_NONE;
         }
 
         @Override

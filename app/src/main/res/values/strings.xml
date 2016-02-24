@@ -61,7 +61,7 @@
     <string name="pref_title_display_name">Your name</string>
     <string name="logout">Logout</string>
     <string name="pref_default_username">John Smith</string>
-
+    <string name="refresh_activities">Refresh</string>
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
         <item>Always</item>

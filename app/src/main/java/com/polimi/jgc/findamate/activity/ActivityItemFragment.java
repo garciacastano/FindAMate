@@ -18,7 +18,7 @@ import com.backendless.async.callback.BackendlessCallback;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.model.Defaults;
-import com.polimi.jgc.findamate.util.ActivityManager;
+
 import com.polimi.jgc.findamate.controller.ActivityItemRecyclerViewAdapter;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,6 @@ public class ActivityItemFragment extends Fragment {
         onSaveInstanceState(savedInstanceState);
         super.onCreate(savedInstanceState);
         activities = new ArrayList<>();
-        downloadData();
     }
 
     @Override
@@ -72,6 +71,7 @@ public class ActivityItemFragment extends Fragment {
         Context context = view.getContext();
         recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        downloadData();
         return view;
     }
 
@@ -106,7 +106,7 @@ public class ActivityItemFragment extends Fragment {
         void onActivitySelected(ActivityItem item);
     }
 
-    private void downloadData() {
+    public void downloadData() {
         BackendlessDataQuery query = new BackendlessDataQuery();
         switch (getArguments().getString(Defaults.ARG_ACTIVITY_MODE)) {
             case Defaults.ARG_YOUR_INTERESTS:

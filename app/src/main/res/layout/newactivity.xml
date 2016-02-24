@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="horizontal"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add New Activity"
+        android:textSize="@dimen/text_large"
+        android:textColor="@color/list_title"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp" />
+
+    <TableLayout
             android:layout_width="fill_parent"
-            android:layout_height="@dimen/dp48"
-            android:gravity="center"
-            android:layout_marginBottom="@dimen/dp4"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add New Activity"
-                android:textSize="@dimen/text_large"
-                android:textColor="@color/list_title"
-                android:layout_marginRight="@dimen/dp4"/>
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp4">
 
         <TableRow
             android:layout_width="fill_parent"
@@ -40,23 +34,14 @@
                 android:layout_marginRight="@dimen/dp4" />
 
             <EditText
-
-                android:layout_width="@dimen/dp144"
-                android:layout_height="@dimen/dp48"
-                android:id="@+id/titleActivity"
-                android:textSize="@dimen/text_medium"
-                android:layout_marginLeft="@dimen/dp4"
-                android:gravity="left"
-                android:focusable="false"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/newactivity_title"
+                android:layout_column="1" />
 
         </TableRow>
-        <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp4"
-            android:layout_marginBottom="@dimen/dp4">
-            <TableRow
+
+        <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/dp48"
                 android:gravity="left">
@@ -64,24 +49,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp48"
-                    android:text="Sport"
+                    android:text="Category"
                     android:paddingRight="@dimen/dp4"
                     android:textSize="@dimen/text_medium"
                     android:gravity="left"
                     android:layout_marginRight="@dimen/dp4" />
 
-                <EditText
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/newactivity_category"
+                android:layout_column="1" />
 
-                    android:layout_width="@dimen/dp144"
-                    android:layout_height="@dimen/dp48"
-                    android:id="@+id/sportActivity"
-                    android:textSize="@dimen/text_medium"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:gravity="left"
-
-                    android:focusable="false" />
-
-            </TableRow>
+        </TableRow>
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/dp48"
@@ -97,15 +77,11 @@
                     android:layout_margin="@dimen/dp4" />
 
                 <EditText
-
-                    android:layout_width="@dimen/dp144"
-                    android:layout_height="@dimen/dp48"
-                    android:id="@+id/dateActivity"
-                    android:textSize="@dimen/text_medium"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:gravity="left"
-
-                    android:inputType="datetime" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/newactivity_date"
+                    android:layout_column="1"
+                    android:inputType="text" />
 
             </TableRow>
 
@@ -124,15 +100,11 @@
                     android:layout_marginRight="@dimen/dp4" />
 
                 <EditText
-
-                    android:layout_width="@dimen/dp144"
-                    android:layout_height="@dimen/dp48"
-                    android:id="@+id/descriptionActivity"
-                    android:textSize="@dimen/text_medium"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:gravity="left"
-
-                    android:inputType="textLongMessage" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/newactivity_description"
+                    android:layout_column="1"
+                    android:inputType="text" />
 
             </TableRow>
 
@@ -151,15 +123,12 @@
                     android:layout_margin="@dimen/dp4" />
 
                 <EditText
-
-                    android:layout_width="@dimen/dp144"
-                    android:layout_height="@dimen/dp48"
-                    android:id="@+id/currentplayersActivity"
-                    android:textSize="@dimen/text_medium"
-                    android:layout_margin="@dimen/dp4"
-                    android:gravity="left"
-
-                    android:inputType="number" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:id="@+id/newactivity_currentplayers"
+                    android:layout_column="1" />
 
             </TableRow>
 
@@ -173,20 +142,18 @@
                     android:layout_height="@dimen/dp48"
                     android:text="Players needed"
                     android:paddingRight="@dimen/dp4"
+                    android:inputType="numberDecimal"
                     android:textSize="@dimen/text_medium"
                     android:gravity="left"
                     android:layout_margin="@dimen/dp4" />
 
                 <EditText
-
-                    android:layout_width="@dimen/dp144"
-                    android:layout_height="@dimen/dp48"
-                    android:id="@+id/playersneededActivity"
-                    android:textSize="@dimen/text_medium"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:gravity="left"
-
-                    android:inputType="number" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:id="@+id/newactivity_playersneeded"
+                    android:layout_column="1" />
 
             </TableRow>
 
@@ -205,27 +172,23 @@
                     android:layout_marginRight="@dimen/dp4" />
 
                 <EditText
-
-                    android:layout_width="@dimen/dp144"
-                    android:layout_height="@dimen/dp48"
-                    android:id="@+id/locationActivity"
-                    android:textSize="@dimen/text_medium"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:gravity="left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/newactivity_location"
+                    android:layout_column="1"
                     android:inputType="text" />
 
             </TableRow>
 
-        </TableLayout>
+    </TableLayout>
 
-        <Button
+    <Button
             android:layout_width="@dimen/dp144"
             android:layout_height="@dimen/dp48"
             android:text="ADD ACTIVITY"
-            android:id="@+id/addActivityButton"
+            android:id="@+id/newactivity_add"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dp4"
             android:textSize="@dimen/text_medium"
             android:height="@dimen/dp40"/>
     </LinearLayout>
-</LinearLayout>

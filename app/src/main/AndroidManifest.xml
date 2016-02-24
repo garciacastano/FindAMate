@@ -64,12 +64,20 @@
         <service android:name="com.backendless.AndroidService" />
 
         <activity android:name=".activity.SettingsActivity" />
-        <activity
-            android:name=".activity.DetailsActivity"
+        <activity android:name=".activity.DetailsActivity"
             android:label="@string/title_activity_details"
             android:parentActivityName=".activity.ListActivitiesActivity" >>
             <intent-filter>
 
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListActivitiesActivity" />
+        </activity>
+        <activity android:name=".activity.NewActivity"
+            android:parentActivityName=".activity.ListActivitiesActivity" >>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
             <meta-data

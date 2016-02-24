@@ -53,6 +53,10 @@ public class ActivityItem{
         return ownerId;
     }
 
+    public void setOwnerId(String ownerId){
+        this.ownerId=ownerId;
+    }
+
     public double getLatitude(){
         return latitude;
     }
