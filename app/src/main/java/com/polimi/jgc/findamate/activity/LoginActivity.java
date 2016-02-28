@@ -63,7 +63,7 @@ public class LoginActivity extends Activity
                 super.handleResponse(currentUser);
                 Backendless.UserService.setCurrentUser(currentUser);
                 session.createUserLoginSession(currentUser.getProperty("name").toString(),
-                        currentUser.getProperty("email").toString());
+                        currentUser.getProperty("email").toString(),"");
                 Intent i = new Intent( getBaseContext(), ListActivitiesActivity.class );
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -153,7 +153,7 @@ public class LoginActivity extends Activity
       @Override
       public void handleResponse( BackendlessUser backendlessUser ){
         super.handleResponse(backendlessUser);
-        session.createUserLoginSession(backendlessUser.getProperty("name").toString(),identity);
+        session.createUserLoginSession(backendlessUser.getProperty("name").toString(),identity,"");
         Intent i = new Intent( LoginActivity.this, ListActivitiesActivity.class );
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -186,7 +186,7 @@ public class LoginActivity extends Activity
       @Override
       public void handleResponse( BackendlessUser backendlessUser ){
         session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
-                backendlessUser.getProperty("email").toString());
+                backendlessUser.getProperty("email").toString(),"");
         Intent i = new Intent( getBaseContext(), ListActivitiesActivity.class );
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -201,7 +201,7 @@ public class LoginActivity extends Activity
       @Override
       public void handleResponse( BackendlessUser backendlessUser ){
         session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
-                backendlessUser.getProperty("email").toString());
+                backendlessUser.getProperty("email").toString(),"");
         Intent i = new Intent( getBaseContext(), ListActivitiesActivity.class );
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -216,7 +216,7 @@ public class LoginActivity extends Activity
       @Override
       public void handleResponse( BackendlessUser backendlessUser ){
         session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
-                backendlessUser.getProperty("email").toString());
+                backendlessUser.getProperty("email").toString(),"");
         Intent i = new Intent( getBaseContext(), ListActivitiesActivity.class );
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

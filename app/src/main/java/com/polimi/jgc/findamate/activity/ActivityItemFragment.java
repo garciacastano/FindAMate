@@ -111,6 +111,7 @@ public class ActivityItemFragment extends Fragment {
         switch (getArguments().getString(Defaults.ARG_ACTIVITY_MODE)) {
             case Defaults.ARG_YOUR_INTERESTS:
                 query.setWhereClause("category = 'SOCCER'");
+                //TODO modificar la query para que obtenga parseado el format de interests del usuario de la sesion
                 ActivityItem.findAsync(query, new DefaultCallback<BackendlessCollection<ActivityItem>>(getActivity()) {
                     @Override
                     public void handleResponse(BackendlessCollection<ActivityItem> response) {
@@ -127,6 +128,7 @@ public class ActivityItemFragment extends Fragment {
 
             case Defaults.ARG_YOUR_ACTIVITIES:
                 query.setWhereClause("ownerId = 'jorge@jorge.jorge'");
+                //TODO correo actual del usuario en sesion
                 ActivityItem.findAsync(query, new DefaultCallback<BackendlessCollection<ActivityItem>>(getActivity()) {
                     @Override
                     public void handleResponse(BackendlessCollection<ActivityItem> response) {

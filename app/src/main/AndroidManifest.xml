@@ -76,6 +76,7 @@
                 android:value=".activity.ListActivitiesActivity" />
         </activity>
         <activity android:name=".activity.NewActivity"
+            android:label="@string/edit_activity_label"
             android:parentActivityName=".activity.ListActivitiesActivity" >>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

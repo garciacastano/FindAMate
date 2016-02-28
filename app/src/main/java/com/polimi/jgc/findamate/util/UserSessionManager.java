@@ -3,6 +3,7 @@ package com.polimi.jgc.findamate.util;
 /**
  * Created by JGC on 23/02/2016.
  */
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Context;
@@ -26,10 +27,16 @@ public class UserSessionManager {
     }
 
     //Create login session
-    public void createUserLoginSession(String name, String email){
+    public void createUserLoginSession(String name, String email, String interests){
         editor.putBoolean(Defaults.IS_USER_LOGIN, true);
         editor.putString(Defaults.KEY_NAME, name);
+        editor.putString(Defaults.KEY_INTERESTS_FORMATED, interests);
         editor.putString(Defaults.KEY_EMAIL, email);
+        editor.commit();
+    }
+
+    public void modifyInterests (String interests){
+        editor.putString(Defaults.KEY_INTERESTS_FORMATED, interests);
         editor.commit();
     }
 
@@ -48,6 +55,7 @@ public class UserSessionManager {
         HashMap<String, String> user = new HashMap<String, String>();
         user.put(Defaults.KEY_NAME, pref.getString(Defaults.KEY_NAME, null));
         user.put(Defaults.KEY_EMAIL, pref.getString(Defaults.KEY_EMAIL, null));
+        user.put(Defaults.KEY_INTERESTS_FORMATED, pref.getString(Defaults.KEY_INTERESTS_FORMATED, null));
         return user;
     }
 

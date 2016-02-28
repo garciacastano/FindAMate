@@ -1,5 +1,6 @@
 package com.polimi.jgc.findamate.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
@@ -26,6 +28,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.R;
 import com.polimi.jgc.findamate.model.Defaults;
+import com.polimi.jgc.findamate.util.CategoryManager;
 import com.polimi.jgc.findamate.util.DefaultCallback;
 import com.polimi.jgc.findamate.util.UserSessionManager;
 
@@ -35,24 +38,12 @@ import java.util.Date;
 import java.util.HashMap;
 
 
-public class ListActivitiesActivity extends AppCompatActivity implements ActivityItemFragment.OnListFragmentInteractionListener {
+public class ListActivitiesActivity extends ActionBarActivity implements ActivityItemFragment.OnListFragmentInteractionListener {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
-    Context context;
-    UserSessionManager session;
+    private Context context;
+    private UserSessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +88,6 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
     @Override
     public void onResume(){
         super.onResume();
-
         if(!session.checkLogin()){
             finish();
         }
@@ -106,24 +96,10 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Defaults.ADD_ACTIVITY) {
-            Bundle bundle = data.getExtras();
-            ActivityItem activityItem = new ActivityItem();
-            activityItem.setCategory(bundle.getString(Defaults.DETAILS_CATEGORY));
-            activityItem.setDescription(bundle.getString(Defaults.DETAILS_DESCRIPTION));
-            activityItem.setTitle(bundle.getString(Defaults.DETAILS_TITLE));
-            Date d;
-            try{
-                d = Defaults.SIMPLE_DATE_FORMAT.parse(bundle.getString(Defaults.DETAILS_DATE));
-                activityItem.setDate_(d);
-            }catch (ParseException e) {
-                Log.d("PARSE EXCEPTION", "PARSE EXCEPTION");
-            }
 
-            activityItem.setParticipants(bundle.getInt(Defaults.DETAILS_PARTICIPANTS));
-            activityItem.setAssistants(bundle.getInt(Defaults.DETAILS_ASSISTANTS));
-            activityItem.setCategory(bundle.getString(Defaults.DETAILS_CATEGORY));
-            activityItem.setOwnerId(session.getUserDetails().get(Defaults.KEY_EMAIL));
+        //Add an activity
+        if (requestCode == Defaults.ADD_ACTIVITY && resultCode == Defaults.ADD_ACTIVITY ) {
+            ActivityItem activityItem = obtainActivityItem(data.getExtras());
             activityItem.saveAsync(new DefaultCallback<ActivityItem>(this) {
 
                 @Override
@@ -135,6 +111,83 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
                 }
             });
         }
+
+        //Delete an activity
+        if (requestCode == Defaults.SEE_DETAILS && resultCode == Defaults.DELETE_ACTIVITY ) {
+            final ActivityItem activityItem = new ActivityItem();
+            activityItem.setObjectId(data.getExtras().get(Defaults.OBJECTID).toString());
+            activityItem.setTitle(data.getExtras().get(Defaults.DETAILS_TITLE).toString());
+            activityItem.removeAsync(new DefaultCallback<Long>(this) {
+
+                @Override
+                public void handleResponse(Long response) {
+                    super.handleResponse(response);
+                    refreshActivities();
+                    Snackbar.make(mViewPager, "The activity '" + activityItem.getTitle() + "' was succesfully deleted", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+        }
+
+        //Start intent to update activity
+        if (requestCode == Defaults.SEE_DETAILS && resultCode == Defaults.EDIT_ACTIVITY ) {
+            ActivityItem activityItem = obtainActivityItem(data.getExtras());
+            Intent i = new Intent(context, NewActivity.class);
+            i.putExtra(Defaults.OBJECTID, activityItem.getObjectId());
+            i.putExtra(Defaults.DETAILS_TITLE,activityItem.getTitle());
+            i.putExtra(Defaults.DETAILS_CATEGORY,activityItem.getCategory());
+            i.putExtra(Defaults.DETAILS_DATE,activityItem.getDateToString(Defaults.DETAILS_DATE));
+            i.putExtra(Defaults.DETAILS_DESCRIPTION,activityItem.getDescription());
+            i.putExtra(Defaults.DETAILS_PARTICIPANTS,activityItem.getParticipants());
+            i.putExtra(Defaults.DETAILS_ASSISTANTS, activityItem.getAssistants());
+            i.putExtra(Defaults.DETAILS_CATEGORY, activityItem.getCategory());
+            startActivityForResult(i, Defaults.EDIT_ACTIVITY);
+        }
+
+        //Update an activity
+        if (requestCode == Defaults.EDIT_ACTIVITY && resultCode == Defaults.EDIT_ACTIVITY ) {
+            ActivityItem activityItem = obtainActivityItem(data.getExtras());
+            activityItem.saveAsync(new DefaultCallback<ActivityItem>(this) {
+
+                @Override
+                public void handleResponse(ActivityItem response) {
+                    super.handleResponse(response);
+                    refreshActivities();
+                    Snackbar.make(mViewPager, "The activity '" + response.getTitle() + "' was succesfully updated", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+        }
+
+        //Change interests
+        if (requestCode == Defaults.CHANGE_INTERESTS && resultCode == Defaults.CHANGE_INTERESTS ) {
+            String interestsFormated = data.getExtras().get(Defaults.KEY_INTERESTS_FORMATED).toString();
+
+            //TODO guardar interestsFormated en el usuario
+            session.modifyInterests(interestsFormated);
+        }
+    }
+
+    private ActivityItem obtainActivityItem (Bundle bundle){
+        ActivityItem activityItem = new ActivityItem();
+        activityItem.setObjectId(bundle.getString(Defaults.OBJECTID));
+        activityItem.setCategory(bundle.getString(Defaults.DETAILS_CATEGORY));
+        activityItem.setDescription(bundle.getString(Defaults.DETAILS_DESCRIPTION));
+        activityItem.setTitle(bundle.getString(Defaults.DETAILS_TITLE));
+        Date d;
+        try{
+            d = Defaults.SIMPLE_DATE_FORMAT.parse(bundle.getString(Defaults.DETAILS_DATE));
+            Log.d("PARSE "+bundle.getString(Defaults.DETAILS_DATE),d.toString());
+            activityItem.setDate_(d);
+        }catch (ParseException e) {
+            Log.d("PARSE EXCEPTION", "PARSE EXCEPTION");
+        }
+
+        activityItem.setParticipants(bundle.getInt(Defaults.DETAILS_PARTICIPANTS));
+        activityItem.setAssistants(bundle.getInt(Defaults.DETAILS_ASSISTANTS));
+        activityItem.setCategory(bundle.getString(Defaults.DETAILS_CATEGORY));
+        activityItem.setOwnerId(session.getUserDetails().get(Defaults.KEY_EMAIL));
+        return activityItem;
     }
 
     @Override
@@ -150,7 +203,8 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
             refreshActivities();
             return true;
         }
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_changeinterests) {
+            startActivityForResult(new Intent(this,InterestsActivity.class), Defaults.CHANGE_INTERESTS);
             return true;
         }
         if (id == R.id.logout) {
@@ -164,6 +218,7 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
 
     public void onActivitySelected(ActivityItem item) {
         Intent intent = new Intent(this, DetailsActivity.class);
+        intent.putExtra(Defaults.OBJECTID, item.getObjectId());
         intent.putExtra(Defaults.DETAILS_TITLE, item.getTitle());
         intent.putExtra(Defaults.DETAILS_CATEGORY, item.getCategory());
         intent.putExtra(Defaults.DETAILS_DATE, item.getDateToString(Defaults.DETAILS_DATE));
@@ -174,13 +229,19 @@ public class ListActivitiesActivity extends AppCompatActivity implements Activit
         intent.putExtra(Defaults.DETAILS_CREATED, item.getDateToString(Defaults.DETAILS_CREATED));
         intent.putExtra(Defaults.DETAILS_UPDATED, item.getDateToString(Defaults.DETAILS_UPDATED));
         intent.putExtra(Defaults.DETAILS_DESCRIPTION, item.getDescription());
-        startActivity(intent);
+        startActivityForResult(intent, Defaults.SEE_DETAILS);
     }
 
     private void refreshActivities(){
         mSectionsPagerAdapter.notifyDataSetChanged();
         Snackbar.make(mViewPager, "Activities updated", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        intent.putExtra(Defaults.REQUEST_CODE, requestCode);
+        super.startActivityForResult(intent, requestCode);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

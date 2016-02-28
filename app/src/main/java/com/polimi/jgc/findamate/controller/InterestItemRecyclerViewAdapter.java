@@ -58,13 +58,13 @@ public class InterestItemRecyclerViewAdapter extends RecyclerView.Adapter<Intere
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mName;
+        public final CheckBox mName;
         public CategoryItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mName = (TextView) view.findViewById(R.id.interestactivity_item_name);
+            mName = (CheckBox) view.findViewById(R.id.interestactivity_item_checkbox);
         }
     }
 }

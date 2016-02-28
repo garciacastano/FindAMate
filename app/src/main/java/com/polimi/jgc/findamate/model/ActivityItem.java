@@ -17,8 +17,8 @@ public class ActivityItem{
     private String objectId;
     private String ownerId;
     private double latitude;
-    private Integer participants;
-    private Integer assistants;
+    private int participants;
+    private int assistants;
     private String title;
     private double longitude;
     private String description;
@@ -49,6 +49,10 @@ public class ActivityItem{
         return objectId;
     }
 
+    public void setObjectId(String objectId){
+        this.objectId=objectId;
+    }
+
     public String getOwnerId(){
         return ownerId;
     }
@@ -65,19 +69,19 @@ public class ActivityItem{
         this.latitude = latitude;
     }
 
-    public Integer getParticipants(){
+    public int getParticipants(){
         return participants;
     }
 
-    public void setParticipants( Integer participants ){
+    public void setParticipants( int participants ){
         this.participants = participants;
     }
 
-    public Integer getAssistants(){
+    public int getAssistants(){
         return assistants;
     }
 
-    public void setAssistants( Integer assistants ){
+    public void setAssistants( int assistants ){
         this.assistants = assistants;
     }
 
@@ -129,7 +133,7 @@ public class ActivityItem{
             default:
                 return "Error on method getDateToString";
         }
-        int month=date.getMonth()+1;
+        /**int month=date.getMonth()+1;
         int year=date.getYear()+1900;
         String minutes;
         if(date.getMinutes()<10){
@@ -137,9 +141,8 @@ public class ActivityItem{
         }
         else{
             minutes="0"+date.getMinutes();
-        }
-        return date.getHours()+":"+minutes+" - "+date.getDate()+
-                "/"+month+"/"+year;
+        }**/
+        return Defaults.SIMPLE_DATE_FORMAT.format(date);
     }
 
     //BACKENDLESS SAVING METHODS

@@ -28,7 +28,8 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:fillViewport="false" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -44,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_input_add"
+        android:src="@drawable/plus"
         android:clickable="true"/>
 
 </android.support.design.widget.CoordinatorLayout>
