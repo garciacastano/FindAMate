@@ -16,7 +16,8 @@ import org.json.JSONObject;
  */
 public class CategoryManager {
 
-    private final String CATEGORIES[]= {"SOCCER", "VOLLEY", "RUGBY", "TENNIS", "TABLE_TENNIS", "BASKET"};
+    private final String CATEGORIES[]= {"SOCCER", "VOLLEY", "RUGBY", "TENNIS", "TABLE TENNIS", "BASKET"};
+    private final String CATEGORIESSQL[]= {"'SOCCER'", "'VOLLEY'", "'RUGBY'", "'TENNIS'", "'TABLE TENNIS'", "'BASKET'"};
 
     public CategoryManager(){
     }
@@ -25,7 +26,7 @@ public class CategoryManager {
         ArrayList<CategoryItem> categories=new ArrayList<>();
 
         for(int i=0; i<CATEGORIES.length; i++) {
-            CategoryItem c = new CategoryItem(CATEGORIES[i], false);
+            CategoryItem c = new CategoryItem(CATEGORIES[i],CATEGORIESSQL[i]);
             categories.add(c);
         }
         return categories;
@@ -34,17 +35,28 @@ public class CategoryManager {
         String s="";
         for(int i=0; i<selectedInterests.size(); i++){
             if(i==0){
-                s=s+selectedInterests.get(i).toString();
+                s=s+selectedInterests.get(i).getCategorySql();
+                continue;
             }
-            s=s+","+selectedInterests.get(i).toString();
+            if(i==selectedInterests.size()-1){
+                s=s+","+selectedInterests.get(i).getCategorySql();
+                continue;
+            }
+            s=s+","+selectedInterests.get(i).getCategorySql();
         }
         return s;
     }
 
-    public static ArrayList<String> parseInterests (String formatedInterests){
-        ArrayList<String> parse=new ArrayList();
+    public static ArrayList<CategoryItem> parseInterests (String formatedInterests){
+        ArrayList<CategoryItem> parse=new ArrayList();
         for (String interest: formatedInterests.split(",")){
-            parse.add(interest);
+            CategoryItem c = new CategoryItem(interest.replace("'", ""),interest);
+            if(false){
+                continue;
+            }
+            else{
+                parse.add(c);
+            }
         }
         return parse;
     }

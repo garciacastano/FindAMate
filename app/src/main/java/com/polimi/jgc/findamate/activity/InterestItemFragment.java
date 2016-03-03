@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.polimi.jgc.findamate.controller.InterestItemRecyclerViewAdapter;
 import java.util.ArrayList;
 import com.polimi.jgc.findamate.R;
+import com.polimi.jgc.findamate.model.Defaults;
 import com.polimi.jgc.findamate.util.CategoryManager;
 import com.polimi.jgc.findamate.model.CategoryItem;
 
@@ -32,11 +33,11 @@ public class InterestItemFragment extends Fragment {
     }
 
    @SuppressWarnings("unused")
-    public static InterestItemFragment newInstance() {
+    public static InterestItemFragment newInstance(String formatedInterests) {
        InterestItemFragment fragment = new InterestItemFragment();
-        /**Bundle args = new Bundle();
-        args.putString(ARG_ACTIVITY_MODE, mode);
-        fragment.setArguments(args);**/
+        Bundle args = new Bundle();
+        args.putString(Defaults.KEY_INTERESTS_FORMATED, formatedInterests);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -55,16 +56,18 @@ public class InterestItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_interestsactivity_list, container, false);
-        CategoryManager categoryDownloader=new CategoryManager();
-        ArrayList<CategoryItem> categories = categoryDownloader.getListCategories();
+        CategoryManager categoryManager=new CategoryManager();
+        ArrayList<CategoryItem> categories = categoryManager.getListCategories();
+        ArrayList<CategoryItem> interests = CategoryManager.parseInterests(getArguments().get(Defaults.KEY_INTERESTS_FORMATED).toString());
 
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new InterestItemRecyclerViewAdapter(categories, mListener));
+            recyclerView.setAdapter(new InterestItemRecyclerViewAdapter(categories, mListener, interests));
         }
+
         return view;
     }
 

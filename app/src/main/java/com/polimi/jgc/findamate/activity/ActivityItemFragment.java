@@ -21,6 +21,7 @@ import com.polimi.jgc.findamate.model.Defaults;
 
 import com.polimi.jgc.findamate.controller.ActivityItemRecyclerViewAdapter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.polimi.jgc.findamate.R;
@@ -44,10 +45,12 @@ public class ActivityItemFragment extends Fragment {
     }
 
    @SuppressWarnings("unused")
-    public static ActivityItemFragment newInstance(String mode) {
+    public static ActivityItemFragment newInstance(String mode, HashMap<String, String> user) {
         ActivityItemFragment fragment = new ActivityItemFragment();
         Bundle args = new Bundle();
         args.putString(Defaults.ARG_ACTIVITY_MODE, mode);
+        args.putString(Defaults.KEY_EMAIL, user.get(Defaults.KEY_EMAIL));
+        args.putString(Defaults.KEY_INTERESTS_FORMATED, user.get(Defaults.KEY_INTERESTS_FORMATED));
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,7 +74,7 @@ public class ActivityItemFragment extends Fragment {
         Context context = view.getContext();
         recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        downloadData();
+        downloadData(null);
         return view;
     }
 
@@ -106,18 +109,21 @@ public class ActivityItemFragment extends Fragment {
         void onActivitySelected(ActivityItem item);
     }
 
-    public void downloadData() {
+    public void downloadData(String newInterests) {
+        if(newInterests!=null) {
+            getArguments().putString(Defaults.KEY_INTERESTS_FORMATED,newInterests);
+        }
         BackendlessDataQuery query = new BackendlessDataQuery();
         switch (getArguments().getString(Defaults.ARG_ACTIVITY_MODE)) {
             case Defaults.ARG_YOUR_INTERESTS:
-                query.setWhereClause("category = 'SOCCER'");
-                //TODO modificar la query para que obtenga parseado el format de interests del usuario de la sesion
+                query.setWhereClause("category in ("+getArguments().getString(Defaults.KEY_INTERESTS_FORMATED)+")");
+                Log.d("ERROR QUERY", query.toString());
                 ActivityItem.findAsync(query, new DefaultCallback<BackendlessCollection<ActivityItem>>(getActivity()) {
                     @Override
                     public void handleResponse(BackendlessCollection<ActivityItem> response) {
                         super.handleResponse(response);
                         activities = response.getData();
-                        Log.d("RETRIEVE DATA", "Activities SOCCER = " + activities.size());
+                        Log.d("RETRIEVE DATA", "Activities YOUR INTERESTS = " + activities.size());
                         ActivityItemRecyclerViewAdapter adapter = new ActivityItemRecyclerViewAdapter(activities, mListener);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
@@ -127,14 +133,13 @@ public class ActivityItemFragment extends Fragment {
                 break;
 
             case Defaults.ARG_YOUR_ACTIVITIES:
-                query.setWhereClause("ownerId = 'jorge@jorge.jorge'");
-                //TODO correo actual del usuario en sesion
+                query.setWhereClause("ownerId = '"+getArguments().getString(Defaults.KEY_EMAIL)+"'");
                 ActivityItem.findAsync(query, new DefaultCallback<BackendlessCollection<ActivityItem>>(getActivity()) {
                     @Override
                     public void handleResponse(BackendlessCollection<ActivityItem> response) {
                         super.handleResponse(response);
                         activities = response.getData();
-                        Log.d("RETRIEVE DATA", "Activities de jorge = " + activities.size());
+                        Log.d("RETRIEVE DATA", "Activities de USUARIO = " + activities.size());
                         ActivityItemRecyclerViewAdapter adapter = new ActivityItemRecyclerViewAdapter(activities, mListener);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();

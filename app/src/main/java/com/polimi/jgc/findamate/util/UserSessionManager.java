@@ -10,7 +10,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 import com.polimi.jgc.findamate.activity.LoginActivity;
 import com.polimi.jgc.findamate.model.Defaults;
 
@@ -35,11 +41,6 @@ public class UserSessionManager {
         editor.commit();
     }
 
-    public void modifyInterests (String interests){
-        editor.putString(Defaults.KEY_INTERESTS_FORMATED, interests);
-        editor.commit();
-    }
-
     public boolean checkLogin(){
         if(!this.isUserLoggedIn()){
             Intent i = new Intent(_context, LoginActivity.class);
@@ -49,6 +50,11 @@ public class UserSessionManager {
             return false;
         }
         return true;
+    }
+
+    public void setInterests (String interests) {
+        editor.putString(Defaults.KEY_INTERESTS_FORMATED, interests);
+        editor.commit();
     }
 
     public HashMap<String, String> getUserDetails(){

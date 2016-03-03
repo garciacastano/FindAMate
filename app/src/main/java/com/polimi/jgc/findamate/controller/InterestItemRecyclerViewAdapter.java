@@ -21,10 +21,12 @@ public class InterestItemRecyclerViewAdapter extends RecyclerView.Adapter<Intere
 
     private final ArrayList<CategoryItem> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private final ArrayList<CategoryItem> mSelectedInterests;
 
-    public InterestItemRecyclerViewAdapter(ArrayList<CategoryItem> items, OnListFragmentInteractionListener listener) {
+    public InterestItemRecyclerViewAdapter(ArrayList<CategoryItem> items, OnListFragmentInteractionListener listener, ArrayList<CategoryItem> selectedInterests) {
         mValues = items;
         mListener = listener;
+        mSelectedInterests=selectedInterests;
     }
 
     @Override
@@ -36,8 +38,15 @@ public class InterestItemRecyclerViewAdapter extends RecyclerView.Adapter<Intere
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+
         holder.mItem = mValues.get(position);
         holder.mName.setText(mValues.get(position).getCategory());
+
+        for(int i=0; i<mSelectedInterests.size(); i++){
+            if(mSelectedInterests.get(i).getCategory().equals(holder.mName.getText())){
+                holder.mCheck.setChecked(true);
+            }
+        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +54,7 @@ public class InterestItemRecyclerViewAdapter extends RecyclerView.Adapter<Intere
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
+                    holder.mCheck.setChecked(!holder.mCheck.isChecked());
                     mListener.onInterestSelected(holder.mItem);
                 }
             }
@@ -58,13 +68,18 @@ public class InterestItemRecyclerViewAdapter extends RecyclerView.Adapter<Intere
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final CheckBox mName;
+        public final TextView mName;
+        public final CheckBox mCheck;
         public CategoryItem mItem;
 
         public ViewHolder(View view) {
             super(view);
+            view.setClickable(true);
             mView = view;
-            mName = (CheckBox) view.findViewById(R.id.interestactivity_item_checkbox);
+            mCheck = (CheckBox) view.findViewById(R.id.interestactivity_item_checkbox);
+            mCheck.setChecked(false);
+            mName = (TextView) view.findViewById(R.id.interestactivity_item_name);
         }
+
     }
 }

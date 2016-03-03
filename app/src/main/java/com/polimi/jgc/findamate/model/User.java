@@ -1,6 +1,9 @@
 package com.polimi.jgc.findamate.model;
 
+import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 public class User extends BackendlessUser
 {
@@ -56,4 +59,6 @@ public class User extends BackendlessUser
   {
     super.setProperty( "name", name );
   }
+
+
 }

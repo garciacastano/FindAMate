@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.*;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.polimi.jgc.findamate.model.Defaults;
 import com.polimi.jgc.findamate.model.User;
 import com.polimi.jgc.findamate.util.DefaultCallback;
 import com.polimi.jgc.findamate.R;
@@ -15,8 +16,6 @@ import com.polimi.jgc.findamate.R;
 
 public class RegisterActivity extends Activity
 {
-  private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat( "yyyy/MM/dd" );
-
   private EditText dateofbirthField;
   private EditText emailField;
   private EditText genderField;
@@ -65,7 +64,7 @@ public class RegisterActivity extends Activity
             dateofbirthCalendar.set( java.util.Calendar.YEAR, year );
             dateofbirthCalendar.set( java.util.Calendar.MONTH, monthOfYear );
             dateofbirthCalendar.set( java.util.Calendar.DAY_OF_MONTH, dayOfMonth );
-            dateofbirthField.setText( SIMPLE_DATE_FORMAT.format( dateofbirthCalendar.getTime() ) );
+            dateofbirthField.setText(Defaults.SIMPLE_DATE_FORMAT.format( dateofbirthCalendar.getTime() ) );
           }
         }, dateofbirthCalendar.get( java.util.Calendar.YEAR ), dateofbirthCalendar.get( java.util.Calendar.MONTH ), dateofbirthCalendar.get( java.util.Calendar.DAY_OF_MONTH ) ).show();
       }
@@ -101,7 +100,7 @@ public class RegisterActivity extends Activity
 
     if( !dateofbirthText.isEmpty() ){
       try{
-        dateofbirth = SIMPLE_DATE_FORMAT.parse( dateofbirthText );
+        dateofbirth = Defaults.SIMPLE_DATE_FORMAT.parse( dateofbirthText );
       }
       catch( java.text.ParseException e ){
         showToast( e.getMessage() );

@@ -5,15 +5,19 @@ package com.polimi.jgc.findamate.model;
  */
 public class CategoryItem{
     private String category;
-    private boolean isInterested;
+    private String categorySql;
 
-    public CategoryItem (String category, boolean isInterested){
+    public CategoryItem (String category, String categorySql){
         this.category=category;
-        this.isInterested=isInterested;
+        this.categorySql=categorySql;
     }
 
     public String getCategory() {
         return category;
+    }
+
+    public String getCategorySql() {
+        return categorySql;
     }
 
     public void setCategory(String category) {

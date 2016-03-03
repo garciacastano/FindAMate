@@ -21,10 +21,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.UserService;
+import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.local.UserIdStorageFactory;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.R;
 import com.polimi.jgc.findamate.model.Defaults;
@@ -36,6 +41,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class ListActivitiesActivity extends ActionBarActivity implements ActivityItemFragment.OnListFragmentInteractionListener {
@@ -63,15 +69,6 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
         Backendless.initApp(this, Defaults.APPLICATION_ID, Defaults.SECRET_KEY, Defaults.VERSION);
 
         session = new UserSessionManager(getApplicationContext());
-
-        if(!session.checkLogin()){
-            finish();
-        }
-
-        //Obtain data from session
-        /**HashMap<String, String> user = session.getUserDetails();
-        String name = user.get(Defaults.KEY_NAME);
-        String email = user.get(Defaults.KEY_NAME);**/
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.newActivity);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -162,11 +159,26 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
         //Change interests
         if (requestCode == Defaults.CHANGE_INTERESTS && resultCode == Defaults.CHANGE_INTERESTS ) {
             String interestsFormated = data.getExtras().get(Defaults.KEY_INTERESTS_FORMATED).toString();
-
-            //TODO guardar interestsFormated en el usuario
-            session.modifyInterests(interestsFormated);
+            modifyInterests(interestsFormated);
         }
     }
+
+    public void modifyInterests (final String interests){
+        String userId = UserIdStorageFactory.instance().getStorage().get();
+        BackendlessUser user = Backendless.UserService.findById(userId);
+        user.setProperty("interests", interests);
+        Backendless.UserService.update(user, new DefaultCallback<BackendlessUser>(this) {
+            @Override
+            public void handleResponse(BackendlessUser backendlessUser) {
+                super.handleResponse(backendlessUser);
+                session.setInterests(backendlessUser.getProperty("interests").toString());
+                refreshActivities();
+                Snackbar.make(mViewPager, "Your interests were succesfully updated", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+    }
+
 
     private ActivityItem obtainActivityItem (Bundle bundle){
         ActivityItem activityItem = new ActivityItem();
@@ -189,13 +201,11 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
         activityItem.setOwnerId(session.getUserDetails().get(Defaults.KEY_EMAIL));
         return activityItem;
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -204,7 +214,10 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
             return true;
         }
         if (id == R.id.action_changeinterests) {
-            startActivityForResult(new Intent(this,InterestsActivity.class), Defaults.CHANGE_INTERESTS);
+            Intent i = new Intent(this,InterestsActivity.class);
+            i.putExtra(Defaults.KEY_INTERESTS_FORMATED, session.getUserDetails().get(Defaults.KEY_INTERESTS_FORMATED));
+            startActivityForResult(i, Defaults.CHANGE_INTERESTS);
+
             return true;
         }
         if (id == R.id.logout) {
@@ -233,21 +246,34 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
     }
 
     private void refreshActivities(){
+        HashMap<String, String> user = session.getUserDetails();
+        ActivityItemFragment fragmentYI = (ActivityItemFragment) mSectionsPagerAdapter.getFragment(0);
+        fragmentYI.getArguments().putString(Defaults.KEY_INTERESTS_FORMATED, user.get(Defaults.KEY_INTERESTS_FORMATED));
+
+        ActivityItemFragment fragmentYA = (ActivityItemFragment) mSectionsPagerAdapter.getFragment(1);
+        fragmentYA.getArguments().putString(Defaults.KEY_INTERESTS_FORMATED, user.get(Defaults.KEY_INTERESTS_FORMATED));
+
         mSectionsPagerAdapter.notifyDataSetChanged();
         Snackbar.make(mViewPager, "Activities updated", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
-
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         intent.putExtra(Defaults.REQUEST_CODE, requestCode);
         super.startActivityForResult(intent, requestCode);
     }
 
+
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private Map<Integer, String> mFragmentTags;
+        private FragmentManager mFragmentManager;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            mFragmentManager = fm;
+            mFragmentTags = new HashMap<Integer, String>();
         }
 
         @Override
@@ -256,11 +282,11 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_INTERESTS);
+                    return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_INTERESTS, session.getUserDetails());
                 case 1:
-                    return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_ACTIVITIES);
+                    return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_ACTIVITIES, session.getUserDetails());
             }
-            return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_INTERESTS);
+            return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_INTERESTS, session.getUserDetails());
         }
 
         @Override
@@ -268,6 +294,27 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
             // Show  total pages.
             return 2;
         }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Object obj = super.instantiateItem(container, position);
+            if (obj instanceof Fragment) {
+                // record the fragment tag here.
+                Fragment f = (Fragment) obj;
+                String tag = f.getTag();
+                mFragmentTags.put(position, tag);
+            }
+            return obj;
+        }
+
+        public Fragment getFragment(int position) {
+            String tag = mFragmentTags.get(position);
+            if (tag == null)
+                return null;
+            return mFragmentManager.findFragmentByTag(tag);
+        }
+
+
 
         @Override
         public int getItemPosition(Object item){

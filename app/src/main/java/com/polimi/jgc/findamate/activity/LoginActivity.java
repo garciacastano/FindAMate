@@ -55,15 +55,21 @@ public class LoginActivity extends Activity
 
           if( !currentUserId.equals( "" ) )
           {
-            Backendless.UserService.findById( currentUserId, new DefaultCallback<BackendlessUser>( LoginActivity.this, "Logging in..." )
-            {
+            Backendless.UserService.findById( currentUserId, new DefaultCallback<BackendlessUser>( LoginActivity.this, "Logging in..." ){
               @Override
               public void handleResponse( BackendlessUser currentUser )
               {
                 super.handleResponse(currentUser);
                 Backendless.UserService.setCurrentUser(currentUser);
-                session.createUserLoginSession(currentUser.getProperty("name").toString(),
-                        currentUser.getProperty("email").toString(),"");
+                if(currentUser.getProperty("interests").toString()==null){
+                  String a= currentUser.getProperty("name").toString();
+                  String b =currentUser.getProperty("email").toString();
+                  session.createUserLoginSession(a,b,"null");
+                }
+                else{
+                  session.createUserLoginSession(currentUser.getProperty("name").toString(),
+                        currentUser.getProperty("email").toString(),currentUser.getProperty("interests").toString());
+                }
                 Intent i = new Intent( getBaseContext(), ListActivitiesActivity.class );
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -147,13 +153,13 @@ public class LoginActivity extends Activity
   public void onLoginButtonClicked(){
     final String identity = identityField.getText().toString();
     String password = passwordField.getText().toString();
-    boolean rememberLogin = rememberLoginBox.isChecked();
+    boolean rememberLogin = true;
 
     Backendless.UserService.login( identity, password, new DefaultCallback<BackendlessUser>( LoginActivity.this ){
       @Override
       public void handleResponse( BackendlessUser backendlessUser ){
         super.handleResponse(backendlessUser);
-        session.createUserLoginSession(backendlessUser.getProperty("name").toString(),identity,"");
+        session.createUserLoginSession(backendlessUser.getProperty("name").toString(),identity, backendlessUser.getProperty("interests").toString());
         Intent i = new Intent( LoginActivity.this, ListActivitiesActivity.class );
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -186,7 +192,7 @@ public class LoginActivity extends Activity
       @Override
       public void handleResponse( BackendlessUser backendlessUser ){
         session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
-                backendlessUser.getProperty("email").toString(),"");
+                backendlessUser.getProperty("email").toString(),backendlessUser.getProperty("interests").toString());
         Intent i = new Intent( getBaseContext(), ListActivitiesActivity.class );
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -201,7 +207,7 @@ public class LoginActivity extends Activity
       @Override
       public void handleResponse( BackendlessUser backendlessUser ){
         session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
-                backendlessUser.getProperty("email").toString(),"");
+                backendlessUser.getProperty("email").toString(),backendlessUser.getProperty("interests").toString());
         Intent i = new Intent( getBaseContext(), ListActivitiesActivity.class );
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -216,7 +222,7 @@ public class LoginActivity extends Activity
       @Override
       public void handleResponse( BackendlessUser backendlessUser ){
         session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
-                backendlessUser.getProperty("email").toString(),"");
+                backendlessUser.getProperty("email").toString(),backendlessUser.getProperty("interests").toString());
         Intent i = new Intent( getBaseContext(), ListActivitiesActivity.class );
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -33,7 +33,7 @@ public class InterestsActivity extends ActionBarActivity implements InterestItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.interests_activity);
 
-        selectedInterests= new ArrayList<CategoryItem>();
+        selectedInterests= CategoryManager.parseInterests(getIntent().getStringExtra(Defaults.KEY_INTERESTS_FORMATED));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -48,12 +48,13 @@ public class InterestsActivity extends ActionBarActivity implements InterestItem
     }
 
     public void onInterestSelected(CategoryItem item) {
-        if(selectedInterests.contains(item)){
-            selectedInterests.remove(item);
+        for(int i=0; i<selectedInterests.size();i++){
+            if(selectedInterests.get(i).getCategory().equals(item.getCategory())){
+                selectedInterests.remove(i);
+                return;
+            }
         }
-        else{
-            selectedInterests.add(item);
-        }
+        selectedInterests.add(item);
     }
 
     public class PagerAdapter extends FragmentPagerAdapter {
@@ -64,7 +65,7 @@ public class InterestsActivity extends ActionBarActivity implements InterestItem
 
         @Override
         public Fragment getItem(int position) {
-            return InterestItemFragment.newInstance();
+            return InterestItemFragment.newInstance(CategoryManager.formatInterests(selectedInterests));
         }
 
         @Override
