@@ -27,7 +27,6 @@ public class LoginActivity extends Activity
   private TextView registerLink, restoreLink;
   private EditText identityField, passwordField;
   private Button loginButton;
-  private CheckBox rememberLoginBox;
   private Button facebookButton;
   private Button twitterButton;
   private Button googleButton;
@@ -61,10 +60,8 @@ public class LoginActivity extends Activity
               {
                 super.handleResponse(currentUser);
                 Backendless.UserService.setCurrentUser(currentUser);
-                if(currentUser.getProperty("interests").toString()==null){
-                  String a= currentUser.getProperty("name").toString();
-                  String b =currentUser.getProperty("email").toString();
-                  session.createUserLoginSession(a,b,"null");
+                if(currentUser.getProperty("interests")==null){
+                  session.createUserLoginSession(currentUser.getProperty("name").toString(),currentUser.getProperty("email").toString(),"null");
                 }
                 else{
                   session.createUserLoginSession(currentUser.getProperty("name").toString(),
@@ -92,7 +89,6 @@ public class LoginActivity extends Activity
     identityField = (EditText) findViewById( R.id.identityField );
     passwordField = (EditText) findViewById( R.id.passwordField );
     loginButton = (Button) findViewById( R.id.loginButton );
-    rememberLoginBox = (CheckBox) findViewById( R.id.rememberLoginBox );
     facebookButton = (Button) findViewById( R.id.loginFacebookButton );
     twitterButton = (Button) findViewById( R.id.loginTwitterButton );
     googleButton = (Button) findViewById(R.id.loginGoogleButton);
@@ -159,7 +155,13 @@ public class LoginActivity extends Activity
       @Override
       public void handleResponse( BackendlessUser backendlessUser ){
         super.handleResponse(backendlessUser);
-        session.createUserLoginSession(backendlessUser.getProperty("name").toString(),identity, backendlessUser.getProperty("interests").toString());
+        if(backendlessUser.getProperty("interests")==null){
+          session.createUserLoginSession(backendlessUser.getProperty("name").toString(),backendlessUser.getProperty("email").toString(),"null");
+        }
+        else{
+          session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
+                  backendlessUser.getProperty("email").toString(),backendlessUser.getProperty("interests").toString());
+        }
         Intent i = new Intent( LoginActivity.this, ListActivitiesActivity.class );
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

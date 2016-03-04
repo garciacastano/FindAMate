@@ -74,14 +74,15 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(context, NewActivity.class), Defaults.ADD_ACTIVITY);
+                Intent i =new Intent(context, NewActivity.class);
+                i.putExtra(Defaults.SESSION_EMAIL, session.getUserDetails().get(Defaults.KEY_EMAIL));
+                startActivityForResult(i, Defaults.ADD_ACTIVITY);
             }
         });
 
         Snackbar.make(mViewPager, "Welcome "+session.getUserDetails().get(Defaults.KEY_NAME), Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
-
     @Override
     public void onResume(){
         super.onResume();
@@ -90,13 +91,12 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
         }
 
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         //Add an activity
         if (requestCode == Defaults.ADD_ACTIVITY && resultCode == Defaults.ADD_ACTIVITY ) {
-            ActivityItem activityItem = obtainActivityItem(data.getExtras());
+            ActivityItem activityItem = ActivityItem.obtainActivityItem(data.getExtras());
             activityItem.saveAsync(new DefaultCallback<ActivityItem>(this) {
 
                 @Override
@@ -128,7 +128,7 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
 
         //Start intent to update activity
         if (requestCode == Defaults.SEE_DETAILS && resultCode == Defaults.EDIT_ACTIVITY ) {
-            ActivityItem activityItem = obtainActivityItem(data.getExtras());
+            ActivityItem activityItem = ActivityItem.obtainActivityItem(data.getExtras());
             Intent i = new Intent(context, NewActivity.class);
             i.putExtra(Defaults.OBJECTID, activityItem.getObjectId());
             i.putExtra(Defaults.DETAILS_TITLE,activityItem.getTitle());
@@ -143,9 +143,8 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
 
         //Update an activity
         if (requestCode == Defaults.EDIT_ACTIVITY && resultCode == Defaults.EDIT_ACTIVITY ) {
-            ActivityItem activityItem = obtainActivityItem(data.getExtras());
+            ActivityItem activityItem = ActivityItem.obtainActivityItem(data.getExtras());
             activityItem.saveAsync(new DefaultCallback<ActivityItem>(this) {
-
                 @Override
                 public void handleResponse(ActivityItem response) {
                     super.handleResponse(response);
@@ -177,29 +176,6 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
                         .setAction("Action", null).show();
             }
         });
-    }
-
-
-    private ActivityItem obtainActivityItem (Bundle bundle){
-        ActivityItem activityItem = new ActivityItem();
-        activityItem.setObjectId(bundle.getString(Defaults.OBJECTID));
-        activityItem.setCategory(bundle.getString(Defaults.DETAILS_CATEGORY));
-        activityItem.setDescription(bundle.getString(Defaults.DETAILS_DESCRIPTION));
-        activityItem.setTitle(bundle.getString(Defaults.DETAILS_TITLE));
-        Date d;
-        try{
-            d = Defaults.SIMPLE_DATE_FORMAT.parse(bundle.getString(Defaults.DETAILS_DATE));
-            Log.d("PARSE "+bundle.getString(Defaults.DETAILS_DATE),d.toString());
-            activityItem.setDate_(d);
-        }catch (ParseException e) {
-            Log.d("PARSE EXCEPTION", "PARSE EXCEPTION");
-        }
-
-        activityItem.setParticipants(bundle.getInt(Defaults.DETAILS_PARTICIPANTS));
-        activityItem.setAssistants(bundle.getInt(Defaults.DETAILS_ASSISTANTS));
-        activityItem.setCategory(bundle.getString(Defaults.DETAILS_CATEGORY));
-        activityItem.setOwnerId(session.getUserDetails().get(Defaults.KEY_EMAIL));
-        return activityItem;
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -236,11 +212,14 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
         intent.putExtra(Defaults.DETAILS_CATEGORY, item.getCategory());
         intent.putExtra(Defaults.DETAILS_DATE, item.getDateToString(Defaults.DETAILS_DATE));
         intent.putExtra(Defaults.DETAILS_PARTICIPANTS, item.getParticipants());
+        intent.putExtra(Defaults.DETAILS_ASSISTANTS, item.getAssistants());
+        intent.putExtra(Defaults.DETAILS_ASSISTANTSEMAILS, item.getAssistantEmails());
         intent.putExtra(Defaults.DETAILS_OWNERID, item.getOwnerId());
         intent.putExtra(Defaults.DETAILS_LATITUDE, item.getLatitude());
         intent.putExtra(Defaults.DETAILS_LONGITUDE, item.getLongitude());
         intent.putExtra(Defaults.DETAILS_CREATED, item.getDateToString(Defaults.DETAILS_CREATED));
         intent.putExtra(Defaults.DETAILS_UPDATED, item.getDateToString(Defaults.DETAILS_UPDATED));
+        intent.putExtra(Defaults.SESSION_EMAIL, session.getUserDetails().get(Defaults.KEY_EMAIL));
         intent.putExtra(Defaults.DETAILS_DESCRIPTION, item.getDescription());
         startActivityForResult(intent, Defaults.SEE_DETAILS);
     }
@@ -262,8 +241,6 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
         intent.putExtra(Defaults.REQUEST_CODE, requestCode);
         super.startActivityForResult(intent, requestCode);
     }
-
-
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 

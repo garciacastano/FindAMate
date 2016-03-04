@@ -16,8 +16,8 @@ import org.json.JSONObject;
  */
 public class CategoryManager {
 
-    private final String CATEGORIES[]= {"SOCCER", "VOLLEY", "RUGBY", "TENNIS", "TABLE TENNIS", "BASKET"};
-    private final String CATEGORIESSQL[]= {"'SOCCER'", "'VOLLEY'", "'RUGBY'", "'TENNIS'", "'TABLE TENNIS'", "'BASKET'"};
+    public static final String CATEGORIES[]= {"SOCCER", "VOLLEYBALL", "RUGBY", "TENNIS", "RUNNING", "FITNESS", "TABLE TENNIS", "BASKETBALL", "AMERICAN FOOTBALL", "BASEBALL", "HANDBALL", "CLIMBING", "SKI", "SNOWBOARD" };
+    public static final String CATEGORIESSQL[]= {"'SOCCER'", "'VOLLEYBALL'", "'RUGBY'", "'TENNIS'", "'RUNNING'", "'FITNESS'", "'TABLE TENNIS'", "'BASKETBALL'", "'AMERICAN FOOTBALL'", "'BASEBALL'", "'HANDBALL'", "'CLIMBING'", "'SKI'", "'SNOWBOARD'" };
 
     public CategoryManager(){
     }

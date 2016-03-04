@@ -165,6 +165,7 @@
             android:layout_marginBottom="@dimen/dp4"
             android:height="@dimen/dp40"
             android:background="@drawable/btn_facebook_bg"
+            android:textColor="#ffffff"
             android:text="@string/facebook_button_text"/>
                                     
         <Button
@@ -172,6 +173,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp48"
             android:layout_marginTop="@dimen/dp4"
+            android:textColor="#ffffff"
             android:height="@dimen/dp40"
             android:background="@drawable/btn_twitter_bg"
             android:text="@string/twitter_button_text"/>
@@ -181,6 +183,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp48"
             android:layout_marginTop="@dimen/dp4"
+            android:textColor="#ffffff"
             android:height="@dimen/dp40"
             android:background="@drawable/btn_google_bg"
             android:text="@string/google_button_text" />

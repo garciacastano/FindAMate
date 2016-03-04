@@ -46,11 +46,12 @@
                     android:gravity="left"
                     android:layout_marginRight="@dimen/dp4" />
 
-            <EditText
-                android:layout_width="wrap_content"
+            <Spinner
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/newactivity_category"
-                android:layout_column="1" />
+                android:layout_column="1"
+                android:spinnerMode="dropdown" />
 
         </TableRow>
             <TableRow
@@ -107,7 +108,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp48"
-                    android:text="Current players"
+                    android:text="Current number of players"
                     android:paddingRight="@dimen/dp4"
                     android:textSize="@dimen/text_medium"
                     android:gravity="left"
@@ -118,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:ems="10"
-                    android:id="@+id/newactivity_currentplayers"
+                    android:id="@+id/newactivity_assistants"
                     android:layout_column="1" />
 
             </TableRow>
@@ -131,7 +132,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp48"
-                    android:text="Players needed"
+                    android:text="Total number of players"
                     android:paddingRight="@dimen/dp4"
                     android:inputType="numberDecimal"
                     android:textSize="@dimen/text_medium"
@@ -143,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:ems="10"
-                    android:id="@+id/newactivity_playersneeded"
+                    android:id="@+id/newactivity_participants"
                     android:layout_column="1" />
 
             </TableRow>

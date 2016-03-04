@@ -21,6 +21,7 @@ public class Defaults {
   public static final String DETAILS_LONGITUDE ="details_longitude";
   public static final String DETAILS_PARTICIPANTS = "details_participants";
   public static final String DETAILS_ASSISTANTS = "details_assistants";
+  public static final String DETAILS_ASSISTANTSEMAILS ="details_assistantsemails";
   public static final String DETAILS_OWNERID = "details_ownerid";
   public static final String DETAILS_CREATED = "details_created";
   public static final String DETAILS_UPDATED = "details_updates";
@@ -33,9 +34,11 @@ public class Defaults {
   public static int PRIVATE_MODE = 0;
   public static final String PREFER_NAME = "UserSession";
   public static final String IS_USER_LOGIN = "IsUserLoggedIn";
+  public static final String IS_FIRST_LOGIN = "IsFirstLogin";
   public static final String KEY_NAME = "name";
   public static final String KEY_EMAIL = "email";
   public static final String KEY_INTERESTS_FORMATED="interests_formated";
+  public static final String SESSION_EMAIL = "session_email";
 
   //Manage activities constants
   public static final int ABORT = 0;
@@ -43,6 +46,7 @@ public class Defaults {
   public static final int SEE_DETAILS = 2;
   public static final int EDIT_ACTIVITY = 3;
   public static final int DELETE_ACTIVITY = 4;
+  public static final int JOIN_ACTIVITY = 6;
 
   //Date constants
   public final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat( "EEE, d MMM yyyy HH:mm:ss" );

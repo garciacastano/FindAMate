@@ -1,7 +1,10 @@
 package com.polimi.jgc.findamate.activity;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -10,6 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,6 +26,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.polimi.jgc.findamate.R;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.model.Defaults;
+import com.polimi.jgc.findamate.util.Assistance;
+import com.polimi.jgc.findamate.util.DefaultCallback;
+
+import java.util.Calendar;
 
 public class DetailsActivity extends ActionBarActivity implements OnMapReadyCallback {
 
@@ -29,10 +39,15 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
     private TextView date;
     private TextView description;
     private TextView participants;
+    private TextView assistantsEmails;
+    private TextView assistants;
     private double lat;
     private double lon;
     private String activityTitle;
     private String objectId;
+    private Button join;
+    private Bundle bundle;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +55,13 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
         setContentView(R.layout.details_activity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        context=this;
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Bundle bundle=getIntent().getExtras();
+        bundle=getIntent().getExtras();
         activityTitle=bundle.getString(Defaults.DETAILS_TITLE);
         objectId=bundle.getString(Defaults.OBJECTID);
 
@@ -60,11 +77,12 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
         participants = (TextView) findViewById(R.id.detail_participants);
         participants.setText(String.valueOf(bundle.getInt(Defaults.DETAILS_PARTICIPANTS)));
 
+        assistants = (TextView) findViewById(R.id.detail_assistants);
+        assistants.setText(String.valueOf(bundle.getInt(Defaults.DETAILS_ASSISTANTS)));
+
         /**
          * TODO implement more information in the layout
          *
-         * assistants = (TextView) findViewById(R.id.detail_assistants);
-         * assistants.setText(String.valueOf(bundle.getInt(Defaults.DETAILS_ASSITANTS)));
          *
          * updated = (TextView) findViewById(R.id.detail_updated);
          * updated.setText(bundle.getString(Defaults.DETAILS_UPDATED));
@@ -77,8 +95,32 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
         description = (TextView) findViewById(R.id.detail_description);
         description.setText(bundle.getString(Defaults.DETAILS_DESCRIPTION));
 
+        assistantsEmails = (TextView) findViewById(R.id.detail_assistantsEmails);
+        assistantsEmails.setText(bundle.getString(Defaults.DETAILS_ASSISTANTSEMAILS));
+
         lat=bundle.getDouble(Defaults.DETAILS_LATITUDE);
         lon=bundle.getDouble(Defaults.DETAILS_LONGITUDE);
+
+        join = (Button) findViewById(R.id.details_join);
+        join.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityItem activityItem = ActivityItem.obtainActivityItem(bundle);
+                activityItem.setAssistantEmails(Assistance.addEmail(bundle.get(Defaults.SESSION_EMAIL).toString(),(bundle.get(Defaults.DETAILS_ASSISTANTSEMAILS).toString())));
+                activityItem.setAssistants(activityItem.getAssistants() + 1);
+                activityItem.setLatitude(lat);
+                activityItem.setLongitude(lon);
+                activityItem.saveAsync(new DefaultCallback<ActivityItem>(context) {
+                    @Override
+                    public void handleResponse(ActivityItem response) {
+                        super.handleResponse(response);
+
+                        Snackbar.make(title, "You checked in", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -92,8 +134,11 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_details, menu);
-        return true;
+        if(bundle.get(Defaults.DETAILS_OWNERID).toString().equals(bundle.get(Defaults.SESSION_EMAIL).toString())){
+            getMenuInflater().inflate(R.menu.menu_details, menu);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -127,17 +172,15 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
             returnIntent.putExtra(Defaults.DETAILS_CATEGORY, category.getText().toString());
             returnIntent.putExtra(Defaults.DETAILS_DATE, date.getText().toString());
             returnIntent.putExtra(Defaults.DETAILS_DESCRIPTION, description.getText().toString());
-            //TODO pasar los parametros de assistants y participants
-            //tb updated y created
-            returnIntent.putExtra(Defaults.DETAILS_PARTICIPANTS, 8);
-            returnIntent.putExtra(Defaults.DETAILS_ASSISTANTS, 6);
+            returnIntent.putExtra(Defaults.DETAILS_PARTICIPANTS, participants.getText().toString());
+            returnIntent.putExtra(Defaults.SESSION_EMAIL, bundle.get(Defaults.SESSION_EMAIL).toString());
+            returnIntent.putExtra(Defaults.DETAILS_ASSISTANTS, assistants.getText().toString());
             returnIntent.putExtra(Defaults.DETAILS_CATEGORY, category.getText().toString());
             returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             setResult(Defaults.EDIT_ACTIVITY, returnIntent);
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

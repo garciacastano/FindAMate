@@ -1,9 +1,11 @@
 package com.polimi.jgc.findamate.controller;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.polimi.jgc.findamate.R;
 import com.polimi.jgc.findamate.activity.ActivityItemFragment.OnListFragmentInteractionListener;
@@ -40,6 +42,7 @@ public class ActivityItemRecyclerViewAdapter extends RecyclerView.Adapter<Activi
         holder.mTitle.setText(mValues.get(position).getTitle());
         holder.mCategory.setText(mValues.get(position).getCategory());
         holder.mDate.setText(mValues.get(position).getDateToString(Defaults.DETAILS_DATE));
+        holder.mImage.setImageResource(mValues.get(position).getImageId());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +68,7 @@ public class ActivityItemRecyclerViewAdapter extends RecyclerView.Adapter<Activi
         public final TextView mCategory;
         public final TextView mDate;
         public ActivityItem mItem;
+        public final ImageView mImage;
 
         public ViewHolder(View view) {
             super(view);
@@ -72,6 +76,7 @@ public class ActivityItemRecyclerViewAdapter extends RecyclerView.Adapter<Activi
             mTitle = (TextView) view.findViewById(R.id.listactivity_item_title);
             mCategory = (TextView) view.findViewById(R.id.listactivity_item_category);
             mDate = (TextView) view.findViewById(R.id.listactivity_item_date);
+            mImage = (ImageView) view.findViewById(R.id.listactivity_item_image);
         }
     }
 }

@@ -1,10 +1,15 @@
 package com.polimi.jgc.findamate.model;
 
+import android.os.Bundle;
+import android.util.Log;
+
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.polimi.jgc.findamate.R;
 
+import java.text.ParseException;
 import java.util.Date;
 
 
@@ -22,6 +27,8 @@ public class ActivityItem{
     private String title;
     private double longitude;
     private String description;
+    private String assistantEmails;
+    private int imageId;
 
 
     //GETTERS AND SETTERS
@@ -39,6 +46,41 @@ public class ActivityItem{
 
     public String getCategory(){
         return category;
+    }
+
+    public int getImageId (){
+        switch (category){
+            case "SOCCER":
+                return R.drawable.soccer;
+            case "VOLLEYBALL":
+                return R.drawable.volleyball;
+            case "BASKETBALL":
+                return R.drawable.basketball;
+            case "BASEBALL":
+                return R.drawable.baseball;
+            case "HANDBALL":
+                return R.drawable.handball;
+            case "SKI":
+                return R.drawable.ski;
+            case "SNOWBOARD":
+                return R.drawable.snowboard;
+            case "RUGBY":
+                return R.drawable.rugby;
+            case "TENNIS":
+                return R.drawable.tennis;
+            case "TABLE TENNIS":
+                return R.drawable.table_tennis;
+            case "CLIMBING":
+                return R.drawable.climbing;
+            case "RUNNING":
+                return R.drawable.running;
+            case "FITNESS":
+                return R.drawable.fitness;
+            case "AMERICAN FOOTBALL":
+                return R.drawable.american_football;
+            default:
+                return R.drawable.running;
+        }
     }
 
     public void setCategory( String category ){
@@ -75,6 +117,14 @@ public class ActivityItem{
 
     public void setParticipants( int participants ){
         this.participants = participants;
+    }
+
+    public String getAssistantEmails(){
+        return assistantEmails;
+    }
+
+    public void setAssistantEmails ( String assistantEmails ){
+        this.assistantEmails = assistantEmails;
     }
 
     public int getAssistants(){
@@ -143,6 +193,28 @@ public class ActivityItem{
             minutes="0"+date.getMinutes();
         }**/
         return Defaults.SIMPLE_DATE_FORMAT.format(date);
+    }
+
+    public static ActivityItem obtainActivityItem (Bundle bundle){
+        ActivityItem activityItem = new ActivityItem();
+        activityItem.setObjectId(bundle.getString(Defaults.OBJECTID));
+        activityItem.setCategory(bundle.getString(Defaults.DETAILS_CATEGORY));
+        activityItem.setDescription(bundle.getString(Defaults.DETAILS_DESCRIPTION));
+        activityItem.setTitle(bundle.getString(Defaults.DETAILS_TITLE));
+        Date d;
+        try{
+            d = Defaults.SIMPLE_DATE_FORMAT.parse(bundle.getString(Defaults.DETAILS_DATE));
+            Log.d("PARSE " + bundle.getString(Defaults.DETAILS_DATE), d.toString());
+            activityItem.setDate_(d);
+        }catch (ParseException e) {
+            Log.d("PARSE EXCEPTION", "PARSE EXCEPTION");
+        }
+
+        activityItem.setParticipants(bundle.getInt(Defaults.DETAILS_PARTICIPANTS));
+        activityItem.setAssistants(bundle.getInt(Defaults.DETAILS_ASSISTANTS));
+        activityItem.setCategory(bundle.getString(Defaults.DETAILS_CATEGORY));
+        activityItem.setOwnerId(bundle.getString(Defaults.DETAILS_OWNERID));
+        return activityItem;
     }
 
     //BACKENDLESS SAVING METHODS

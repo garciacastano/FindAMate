@@ -14,17 +14,21 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.polimi.jgc.findamate.R;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.model.Defaults;
+import com.polimi.jgc.findamate.util.CategoryManager;
 import com.polimi.jgc.findamate.util.DefaultCallback;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 /**
@@ -34,13 +38,14 @@ public class NewActivity extends ActionBarActivity {
 
     //private Button add;
     private EditText title;
-    private EditText category;
-    private EditText currentPlayers;
-    private EditText playersNeeded;
+    private EditText participants;
+    private EditText assistants;
     private EditText date;
     private EditText description;
     private String objectId;
     private boolean isEdit;
+    private Spinner category;
+    private String session_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -48,16 +53,20 @@ public class NewActivity extends ActionBarActivity {
         setContentView(R.layout.newactivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        session_email=getIntent().getStringExtra(Defaults.SESSION_EMAIL);
+
         title = (EditText) findViewById(R.id.newactivity_title);
-        category = (EditText) findViewById(R.id.newactivity_category);
-        currentPlayers = (EditText) findViewById(R.id.newactivity_currentplayers);
-        playersNeeded = (EditText) findViewById(R.id.newactivity_playersneeded);
+        category = (Spinner) findViewById(R.id.newactivity_category);
+        category.setAdapter(new ArrayAdapter(this,android.R.layout.simple_spinner_item, CategoryManager.CATEGORIES));
+
+        assistants = (EditText) findViewById(R.id.newactivity_assistants);
+        participants = (EditText) findViewById(R.id.newactivity_participants);
         description = (EditText) findViewById(R.id.newactivity_description);
 
         date = (EditText) findViewById(R.id.newactivity_date);
+        final Calendar dateCalendar = Calendar.getInstance();
         date.setOnClickListener(new View.OnClickListener() {
             Calendar currentCalendar = Calendar.getInstance();
-            Calendar dateCalendar = Calendar.getInstance();
             @Override
             public void onClick(View view) {
                 new DatePickerDialog(NewActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -83,73 +92,44 @@ public class NewActivity extends ActionBarActivity {
             isEdit=true;
             Bundle bundle = getIntent().getExtras();
             title.setText(bundle.get(Defaults.DETAILS_TITLE).toString());
-            category.setText(bundle.get(Defaults.DETAILS_CATEGORY).toString());
-            int assistants = Integer.parseInt(bundle.get(Defaults.DETAILS_ASSISTANTS).toString());
-            //int participants = Integer.parseInt(bundle.get(Defaults.DETAILS_PARTICIPANTS).toString());
-            int needed = Integer.parseInt(bundle.get(Defaults.DETAILS_PARTICIPANTS).toString()) - assistants;
-            currentPlayers.setText(""+assistants);
-            playersNeeded.setText(""+needed);
+            category.setSelection(Arrays.asList(CategoryManager.CATEGORIES).indexOf(bundle.get(Defaults.DETAILS_CATEGORY).toString()));
+            assistants.setText(bundle.get(Defaults.DETAILS_ASSISTANTS).toString());
+            participants.setText(bundle.get(Defaults.DETAILS_PARTICIPANTS).toString());
             description.setText(bundle.get(Defaults.DETAILS_DESCRIPTION).toString());
             date.setText(bundle.get(Defaults.DETAILS_DATE).toString());
             objectId=bundle.get(Defaults.OBJECTID).toString();
         }else{
             isEdit=false;
         }
-
-
-        /**add = (Button) findViewById(R.id.newactivity_add);
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int current =Integer.parseInt(currentPlayers.getText().toString());
-                int needed =Integer.parseInt(playersNeeded.getText().toString());
-                if(title.getText()!=null &&
-                    category.getText()!=null &&
-                    description.getText()!=null &&
-                    needed > 0 &&
-                    current >0 &&
-                    category.getText()!=null &&
-                    date.getText() != null){
-                        Intent returnIntent = new Intent();
-                        returnIntent.putExtra(Defaults.DETAILS_TITLE,title.getText().toString());
-                        returnIntent.putExtra(Defaults.DETAILS_CATEGORY,category.getText().toString());
-                        returnIntent.putExtra(Defaults.DETAILS_DATE,date.getText().toString());
-                        returnIntent.putExtra(Defaults.DETAILS_DESCRIPTION,description.getText().toString());
-                        returnIntent.putExtra(Defaults.DETAILS_PARTICIPANTS,needed+current);
-                        returnIntent.putExtra(Defaults.DETAILS_ASSISTANTS,current);
-                        returnIntent.putExtra(Defaults.DETAILS_CATEGORY,category.getText().toString());
-                        setResult(Defaults.ADD_ACTIVITY,returnIntent);
-                        finish();
-                }
-                else{
-                    Log.d("FALLO EN ADD ACTIVITY", "Se han rellenado mal los campos");
-                }
-            }
-        });**/
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.save_activity) {
-            int current = Integer.parseInt(currentPlayers.getText().toString());
-            int needed = Integer.parseInt(playersNeeded.getText().toString());
-            if (title.getText() != null &&
-                    category.getText() != null &&
-                    description.getText() != null &&
-                    needed > 0 &&
-                    current > 0 &&
-                    category.getText() != null &&
-                    date.getText() != null) {
+            if ( title.getText().toString().isEmpty() ||
+                    participants.getText().toString().isEmpty() ||
+                    assistants.getText().toString().isEmpty() ||
+                    description.getText().toString().isEmpty() ||
+                    date.getText().toString().isEmpty() ||
+                    category.getSelectedItem().toString().isEmpty()){
+                Toast.makeText(this, "There is at least an empty field.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            int a = Integer.parseInt(assistants.getText().toString());
+            int p = Integer.parseInt(participants.getText().toString());
+            if (a > 0 && p >= a) {
                 Intent returnIntent = new Intent();
 
                 returnIntent.putExtra(Defaults.DETAILS_TITLE, title.getText().toString());
-                returnIntent.putExtra(Defaults.DETAILS_CATEGORY, category.getText().toString());
+                returnIntent.putExtra(Defaults.DETAILS_ASSISTANTSEMAILS, "");
+                returnIntent.putExtra(Defaults.DETAILS_CATEGORY, category.getSelectedItem().toString());
                 returnIntent.putExtra(Defaults.DETAILS_DATE, date.getText().toString());
                 returnIntent.putExtra(Defaults.DETAILS_DESCRIPTION, description.getText().toString());
-                returnIntent.putExtra(Defaults.DETAILS_PARTICIPANTS, needed + current);
-                returnIntent.putExtra(Defaults.DETAILS_ASSISTANTS, current);
-                returnIntent.putExtra(Defaults.DETAILS_CATEGORY, category.getText().toString());
+                returnIntent.putExtra(Defaults.DETAILS_OWNERID, session_email);
+                returnIntent.putExtra(Defaults.DETAILS_PARTICIPANTS, p);
+                returnIntent.putExtra(Defaults.DETAILS_ASSISTANTS, a);
+                returnIntent.putExtra(Defaults.DETAILS_CATEGORY, category.getSelectedItem().toString());
                 returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 if(isEdit){
                     returnIntent.putExtra(Defaults.OBJECTID,objectId);
@@ -162,12 +142,10 @@ public class NewActivity extends ActionBarActivity {
                 return true;
 
             } else {
-                Log.d("FALLO EN SAVE ACTIVITY", "Se han rellenado mal los campos");
+                Toast.makeText(this, "Player numbers must be higher than zero.", Toast.LENGTH_SHORT);
             }
-
-            return super.onOptionsItemSelected(item);
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
