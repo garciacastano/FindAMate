@@ -64,9 +64,7 @@
 
         <service android:name="com.backendless.AndroidService" />
 
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+
         <activity
             android:name=".activity.DetailsActivity"
             android:label="@string/title_activity_details"
