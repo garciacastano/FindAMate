@@ -55,4 +55,13 @@ public class Defaults {
   public final static int CHANGE_INTERESTS = 5;
 
   public static final int REQUEST_CODE_AUTOCOMPLETE = 7;
+
+  public static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 25; // in Meters
+  public static final long MINIMUM_TIME_BETWEEN_UPDATES = 5000; // in Milliseconds
+  public static final int MY_PERMISSION_ACCESS_COARSE_LOCATION = 8;
+  public static final int MY_PERMISSION_ACCESS_FINE_LOCATION=9;
+
+  public static String ARG_MYLAT= "my_lat";
+  public static String ARG_MYLON= "my_lon";
+
 }

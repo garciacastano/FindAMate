@@ -17,7 +17,7 @@
     <string name="google_button_text">Google+</string>
     <string name="place_details">
     <![CDATA[
-        <b>%1$s</b>
+        <b>%2$s</b>
         <br/>
         Address: %3$s
     ]]>

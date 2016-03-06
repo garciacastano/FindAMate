@@ -6,6 +6,7 @@ import android.util.Log;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
+import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.polimi.jgc.findamate.R;
 
@@ -29,9 +30,18 @@ public class ActivityItem{
     private String description;
     private String assistantEmails;
     private int imageId;
+    private GeoPoint location;
 
 
     //GETTERS AND SETTERS
+    public GeoPoint getLocation(){
+        return location;
+    }
+
+    public void setLocation (GeoPoint location){
+        this.location=location;
+    }
+
     public Date getUpdated(){
         return updated;
     }
@@ -215,6 +225,7 @@ public class ActivityItem{
         activityItem.setLatitude(bundle.getDouble(Defaults.DETAILS_LATITUDE));
         activityItem.setLongitude(bundle.getDouble(Defaults.DETAILS_LONGITUDE));
         activityItem.setOwnerId(bundle.getString(Defaults.DETAILS_OWNERID));
+        activityItem.setLocation(new GeoPoint(bundle.getDouble(Defaults.DETAILS_LATITUDE),bundle.getDouble(Defaults.DETAILS_LONGITUDE)));
         return activityItem;
     }
 

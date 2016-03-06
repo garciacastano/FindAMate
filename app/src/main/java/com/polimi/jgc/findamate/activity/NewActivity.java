@@ -114,15 +114,15 @@ public class NewActivity extends ActionBarActivity {
         if(getIntent().getIntExtra(Defaults.REQUEST_CODE, Defaults.ABORT)== Defaults.EDIT_ACTIVITY){
             isEdit=true;
             Bundle bundle = getIntent().getExtras();
-            title.setText(bundle.get(Defaults.DETAILS_TITLE).toString());
-            category.setSelection(Arrays.asList(CategoryManager.CATEGORIES).indexOf(bundle.get(Defaults.DETAILS_CATEGORY).toString()));
-            assistants.setText(bundle.get(Defaults.DETAILS_ASSISTANTS).toString());
-            participants.setText(bundle.get(Defaults.DETAILS_PARTICIPANTS).toString());
-            description.setText(bundle.get(Defaults.DETAILS_DESCRIPTION).toString());
-            date.setText(bundle.get(Defaults.DETAILS_DATE).toString());
-            objectId=bundle.get(Defaults.OBJECTID).toString();
-            lat=Double.parseDouble(bundle.get(Defaults.DETAILS_LATITUDE).toString());
-            lon=Double.parseDouble(bundle.get(Defaults.DETAILS_LONGITUDE).toString());
+            title.setText(bundle.getString(Defaults.DETAILS_TITLE));
+            category.setSelection(Arrays.asList(CategoryManager.CATEGORIES).indexOf(bundle.get(Defaults.DETAILS_CATEGORY)));
+            assistants.setText("" + bundle.getInt(Defaults.DETAILS_ASSISTANTS));
+            participants.setText(""+bundle.getInt(Defaults.DETAILS_PARTICIPANTS));
+            description.setText(bundle.getString(Defaults.DETAILS_DESCRIPTION));
+            date.setText(bundle.getString(Defaults.DETAILS_DATE));
+            objectId=bundle.getString(Defaults.OBJECTID);
+            lat=bundle.getDouble(Defaults.DETAILS_LATITUDE);
+            lon=bundle.getDouble(Defaults.DETAILS_LONGITUDE);
         }else{
             isEdit=false;
         }
@@ -152,10 +152,10 @@ public class NewActivity extends ActionBarActivity {
                 returnIntent.putExtra(Defaults.DETAILS_CATEGORY, category.getSelectedItem().toString());
                 returnIntent.putExtra(Defaults.DETAILS_DATE, date.getText().toString());
                 returnIntent.putExtra(Defaults.DETAILS_DESCRIPTION, description.getText().toString());
-                returnIntent.putExtra(Defaults.DETAILS_OWNERID, session_email);
                 returnIntent.putExtra(Defaults.DETAILS_PARTICIPANTS, p);
                 returnIntent.putExtra(Defaults.DETAILS_ASSISTANTS, a);
                 returnIntent.putExtra(Defaults.DETAILS_LATITUDE, lat);
+                returnIntent.putExtra(Defaults.DETAILS_OWNERID, session_email);
                 returnIntent.putExtra(Defaults.DETAILS_LONGITUDE, lon);
                 returnIntent.putExtra(Defaults.DETAILS_CATEGORY, category.getSelectedItem().toString());
                 returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -229,8 +229,7 @@ public class NewActivity extends ActionBarActivity {
 
                 // Format the place's details and display them in the TextView.
                 location_info.setText(formatPlaceDetails(getResources(), place.getName(),
-                        place.getId(), place.getAddress(), place.getPhoneNumber(),
-                        place.getWebsiteUri()));
+                        place.getId(), place.getAddress()));
 
                 lat=place.getLatLng().latitude;
                 lon=place.getLatLng().longitude;
@@ -244,10 +243,9 @@ public class NewActivity extends ActionBarActivity {
         }
     }
     private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
-                                              CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
+                                              CharSequence address) {
         //Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber,websiteUri));
-        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
-                websiteUri));
+        return Html.fromHtml(res.getString(R.string.place_details, id, name, address));
 
     }
 }

@@ -106,7 +106,6 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO comprobar si mi email esta entre los asistentes o si soy el creador, en ese caso no actualizar la actividad
                 ActivityItem activityItem = ActivityItem.obtainActivityItem(bundle);
                 if(!join.getText().toString().equals("Leave")){
                     activityItem.setAssistantEmails(Assistance.addEmail(bundle.getString(Defaults.SESSION_EMAIL),(bundle.getString(Defaults.DETAILS_ASSISTANTSEMAILS))));
@@ -200,9 +199,12 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
             returnIntent.putExtra(Defaults.DETAILS_CATEGORY, category.getText().toString());
             returnIntent.putExtra(Defaults.DETAILS_DATE, date.getText().toString());
             returnIntent.putExtra(Defaults.DETAILS_DESCRIPTION, description.getText().toString());
-            returnIntent.putExtra(Defaults.DETAILS_PARTICIPANTS, participants.getText().toString());
-            returnIntent.putExtra(Defaults.SESSION_EMAIL, bundle.get(Defaults.SESSION_EMAIL).toString());
-            returnIntent.putExtra(Defaults.DETAILS_ASSISTANTS, assistants.getText().toString());
+            returnIntent.putExtra(Defaults.DETAILS_PARTICIPANTS, Integer.parseInt(participants.getText().toString()));
+            returnIntent.putExtra(Defaults.SESSION_EMAIL, bundle.getString(Defaults.SESSION_EMAIL));
+            returnIntent.putExtra(Defaults.DETAILS_OWNERID, bundle.getString(Defaults.SESSION_EMAIL));
+            returnIntent.putExtra(Defaults.DETAILS_ASSISTANTS, Integer.parseInt(assistants.getText().toString()));
+            returnIntent.putExtra(Defaults.DETAILS_LATITUDE, lat);
+            returnIntent.putExtra(Defaults.DETAILS_LONGITUDE, lon);
             returnIntent.putExtra(Defaults.DETAILS_CATEGORY, category.getText().toString());
             returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             setResult(Defaults.EDIT_ACTIVITY, returnIntent);

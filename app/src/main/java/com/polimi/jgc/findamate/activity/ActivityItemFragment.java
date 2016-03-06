@@ -40,6 +40,8 @@ public class ActivityItemFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private List<ActivityItem> activities;
     private RecyclerView recyclerView;
+    private Double myLat = 45.4764869;
+    private Double myLon = 9.2241113;
 
     public ActivityItemFragment() {
     }
@@ -113,11 +115,17 @@ public class ActivityItemFragment extends Fragment {
         if(newInterests!=null) {
             getArguments().putString(Defaults.KEY_INTERESTS_FORMATED,newInterests);
         }
+        Bundle b = getArguments();
+        if(b.getDouble(Defaults.ARG_MYLAT)!=0 && b.getDouble(Defaults.ARG_MYLON) !=0){
+            myLat= b.getDouble(Defaults.ARG_MYLAT);
+            myLon= b.getDouble(Defaults.ARG_MYLON);
+        }
         BackendlessDataQuery query = new BackendlessDataQuery();
-        switch (getArguments().getString(Defaults.ARG_ACTIVITY_MODE)) {
+        switch (b.getString(Defaults.ARG_ACTIVITY_MODE)) {
             case Defaults.ARG_YOUR_INTERESTS:
-                query.setWhereClause("category in ("+getArguments().getString(Defaults.KEY_INTERESTS_FORMATED)+")");
-                Log.d("ERROR QUERY", query.toString());
+                query.setWhereClause("category in ("+b.getString(Defaults.KEY_INTERESTS_FORMATED)+")" +
+                        "and distance( "+myLat+"," +myLon+ ", location.latitude, location.longitude ) < km(10)");
+
                 ActivityItem.findAsync(query, new DefaultCallback<BackendlessCollection<ActivityItem>>(getActivity()) {
                     @Override
                     public void handleResponse(BackendlessCollection<ActivityItem> response) {
@@ -133,7 +141,7 @@ public class ActivityItemFragment extends Fragment {
                 break;
 
             case Defaults.ARG_YOUR_ACTIVITIES:
-                query.setWhereClause("ownerId = '"+getArguments().getString(Defaults.KEY_EMAIL)+"'");
+                query.setWhereClause("ownerId = '"+b.getString(Defaults.KEY_EMAIL)+"'");
                 ActivityItem.findAsync(query, new DefaultCallback<BackendlessCollection<ActivityItem>>(getActivity()) {
                     @Override
                     public void handleResponse(BackendlessCollection<ActivityItem> response) {
