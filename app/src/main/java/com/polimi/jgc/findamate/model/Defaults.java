@@ -53,4 +53,6 @@ public class Defaults {
 
   //Interests activity
   public final static int CHANGE_INTERESTS = 5;
+
+  public static final int REQUEST_CODE_AUTOCOMPLETE = 7;
 }

@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.polimi.jgc.findamate.R;
 import com.polimi.jgc.findamate.model.CategoryItem;
@@ -34,6 +35,10 @@ public class InterestsActivity extends ActionBarActivity implements InterestItem
         setContentView(R.layout.interests_activity);
 
         selectedInterests= CategoryManager.parseInterests(getIntent().getStringExtra(Defaults.KEY_INTERESTS_FORMATED));
+
+        if(selectedInterests.get(0).getCategory().toString().equals("dummy")){
+            selectedInterests.remove(0);
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -94,6 +99,7 @@ public class InterestsActivity extends ActionBarActivity implements InterestItem
         int id = item.getItemId();
         if (id == R.id.save_interests) {
             if(selectedInterests.size()==0){
+                Toast.makeText(this, "Select at least one category", Toast.LENGTH_SHORT).show();
                 return super.onOptionsItemSelected(item);
             }
             Intent returnIntent=new Intent ();

@@ -26,6 +26,18 @@ public class Assistance {
         return formatString(addedList);
     }
 
+    public static String removeEmail (String email, String added){
+        ArrayList<String> addedList = parseString(added);
+
+        for(int i=0; i<addedList.size(); i++){
+            if(addedList.get(i).equals(email)){
+                addedList.remove(i);
+            }
+        }
+
+        return formatString(addedList);
+    }
+
     public static String formatString (ArrayList<String> string){
         String s="";
         for(int i=0; i<string.size(); i++){
@@ -44,9 +56,11 @@ public class Assistance {
 
     public static ArrayList<String> parseString (String string){
         ArrayList<String> parse=new ArrayList();
-        for (String interest: string.split(",")){
-            String c = interest.replace("'", "");
-            parse.add(c);
+        if(string != null){
+            for (String interest: string.split(",")){
+                String c = interest.replace("'", "");
+                parse.add(c);
+            }
         }
         return parse;
     }

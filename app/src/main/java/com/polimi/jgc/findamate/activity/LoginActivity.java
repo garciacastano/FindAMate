@@ -28,7 +28,6 @@ public class LoginActivity extends Activity
   private EditText identityField, passwordField;
   private Button loginButton;
   private Button facebookButton;
-  private Button twitterButton;
   private Button googleButton;
   UserSessionManager session;
 
@@ -60,8 +59,8 @@ public class LoginActivity extends Activity
               {
                 super.handleResponse(currentUser);
                 Backendless.UserService.setCurrentUser(currentUser);
-                if(currentUser.getProperty("interests")==null){
-                  session.createUserLoginSession(currentUser.getProperty("name").toString(),currentUser.getProperty("email").toString(),"null");
+                if(currentUser.getProperty("interests").equals("null")){
+                  session.createUserLoginSession(currentUser.getProperty("name").toString(),currentUser.getProperty("email").toString(),"dummy");
                 }
                 else{
                   session.createUserLoginSession(currentUser.getProperty("name").toString(),
@@ -90,17 +89,16 @@ public class LoginActivity extends Activity
     passwordField = (EditText) findViewById( R.id.passwordField );
     loginButton = (Button) findViewById( R.id.loginButton );
     facebookButton = (Button) findViewById( R.id.loginFacebookButton );
-    twitterButton = (Button) findViewById( R.id.loginTwitterButton );
     googleButton = (Button) findViewById(R.id.loginGoogleButton);
 
     String tempString = getResources().getString( R.string.register_text );
     SpannableString underlinedContent = new SpannableString( tempString );
-    underlinedContent.setSpan( new UnderlineSpan(), 0, tempString.length(), 0 );
+    underlinedContent.setSpan(new UnderlineSpan(), 0, tempString.length(), 0);
     registerLink.setText( underlinedContent );
     tempString = getResources().getString( R.string.restore_link );
     underlinedContent = new SpannableString( tempString );
-    underlinedContent.setSpan( new UnderlineSpan(), 0, tempString.length(), 0 );
-    restoreLink.setText( underlinedContent );
+    underlinedContent.setSpan(new UnderlineSpan(), 0, tempString.length(), 0);
+    restoreLink.setText(underlinedContent);
 
     loginButton.setOnClickListener( new View.OnClickListener(){
       @Override
@@ -130,13 +128,6 @@ public class LoginActivity extends Activity
       }
     });
 
-    twitterButton.setOnClickListener( new View.OnClickListener(){
-      @Override
-      public void onClick( View view ){
-        onLoginWithTwitterButtonClicked();
-      }
-     });
-
     googleButton.setOnClickListener( new View.OnClickListener()    {
       @Override
       public void onClick( View view ){
@@ -151,24 +142,23 @@ public class LoginActivity extends Activity
     String password = passwordField.getText().toString();
     boolean rememberLogin = true;
 
-    Backendless.UserService.login( identity, password, new DefaultCallback<BackendlessUser>( LoginActivity.this ){
+    Backendless.UserService.login(identity, password, new DefaultCallback<BackendlessUser>(LoginActivity.this) {
       @Override
-      public void handleResponse( BackendlessUser backendlessUser ){
+      public void handleResponse(BackendlessUser backendlessUser) {
         super.handleResponse(backendlessUser);
-        if(backendlessUser.getProperty("interests")==null){
-          session.createUserLoginSession(backendlessUser.getProperty("name").toString(),backendlessUser.getProperty("email").toString(),"null");
-        }
-        else{
+        if (backendlessUser.getProperty("interests") == null || backendlessUser.getProperty("interests").equals("null")) {
+          session.createUserLoginSession(backendlessUser.getProperty("name").toString(), backendlessUser.getProperty("email").toString(), "dummy");
+        } else {
           session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
-                  backendlessUser.getProperty("email").toString(),backendlessUser.getProperty("interests").toString());
+                  backendlessUser.getProperty("email").toString(), backendlessUser.getProperty("interests").toString());
         }
-        Intent i = new Intent( LoginActivity.this, ListActivitiesActivity.class );
+        Intent i = new Intent(LoginActivity.this, ListActivitiesActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
         finish();
       }
-    }, rememberLogin );
+    }, rememberLogin);
   }
 
   public void onRegisterLinkClicked(){
@@ -177,54 +167,51 @@ public class LoginActivity extends Activity
   }
 
   public void onRestoreLinkClicked(){
-    startActivity( new Intent( this, RestorePasswordActivity.class ) );
+    startActivity(new Intent(this, RestorePasswordActivity.class));
     finish();
   }
 
   public void onLoginWithFacebookButtonClicked(){
 
-    //TODO obtener nombre del usuario de fb, twitter y google+
-
     Map<String, String> facebookFieldMappings = new HashMap<String, String>();
-    facebookFieldMappings.put( "email", "fb_email" );
+    facebookFieldMappings.put("email", "email");
+    facebookFieldMappings.put("first_name", "name");
+    facebookFieldMappings.put("gender", "gender");
 
     List<String> permissions = new ArrayList<String>();
-    permissions.add( "email" );
-    Backendless.UserService.loginWithFacebook( LoginActivity.this, new SocialCallback<BackendlessUser>( LoginActivity.this ){
+    permissions.add("email");
+    permissions.add("public_profile");
+    Backendless.UserService.loginWithFacebook(LoginActivity.this, null, facebookFieldMappings, permissions, new SocialCallback<BackendlessUser>(LoginActivity.this) {
       @Override
-      public void handleResponse( BackendlessUser backendlessUser ){
-        session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
-                backendlessUser.getProperty("email").toString(),backendlessUser.getProperty("interests").toString());
-        Intent i = new Intent( getBaseContext(), ListActivitiesActivity.class );
+      public void handleResponse(BackendlessUser backendlessUser) {
+        if (backendlessUser.getProperty("interests").equals("null")) {
+          session.createUserLoginSession(backendlessUser.getProperty("name").toString(), backendlessUser.getProperty("email").toString(), "dummy");
+        } else {
+          session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
+                  backendlessUser.getProperty("email").toString(), backendlessUser.getProperty("interests").toString());
+        }
+        Intent i = new Intent(getBaseContext(), ListActivitiesActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
         finish();
       }
-    } );
+    });
   }
 
-  public void onLoginWithTwitterButtonClicked(){
-    Backendless.UserService.loginWithTwitter( LoginActivity.this, new SocialCallback<BackendlessUser>( LoginActivity.this ){
-      @Override
-      public void handleResponse( BackendlessUser backendlessUser ){
-        session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
-                backendlessUser.getProperty("email").toString(),backendlessUser.getProperty("interests").toString());
-        Intent i = new Intent( getBaseContext(), ListActivitiesActivity.class );
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(i);
-        finish();
-      }
-    } );
-  }
 
   public void onLoginWithGoogleButtonClicked(){
     Backendless.UserService.loginWithGooglePlus( LoginActivity.this, new SocialCallback<BackendlessUser>( LoginActivity.this ){
       @Override
       public void handleResponse( BackendlessUser backendlessUser ){
-        session.createUserLoginSession(backendlessUser.getProperty("name").toString(),
-                backendlessUser.getProperty("email").toString(),backendlessUser.getProperty("interests").toString());
+        String a = backendlessUser.getProperty("interests").toString();
+        if(backendlessUser.getProperty("interests").toString().equals("null")){
+          session.createUserLoginSession(backendlessUser.getProperty("email").toString(),backendlessUser.getProperty("email").toString(),"dummy");
+        }
+        else{
+          session.createUserLoginSession(backendlessUser.getProperty("email").toString(),
+                  backendlessUser.getProperty("email").toString(),backendlessUser.getProperty("interests").toString());
+        }
         Intent i = new Intent( getBaseContext(), ListActivitiesActivity.class );
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

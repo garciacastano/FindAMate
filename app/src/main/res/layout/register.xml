@@ -37,177 +37,136 @@
 
         </LinearLayout>
 
-        <TableLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp4"
-                android:layout_marginBottom="@dimen/dp4">
-                                        
-            <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/dp48"
-                    android:gravity="center_horizontal">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp48"
-                        android:text="@string/dateofbirth_field_prompt"
-                        android:paddingRight="@dimen/dp4"
-                        android:textSize="@dimen/text_medium"
-                        android:gravity="center_vertical|right"
-                        android:layout_marginRight="@dimen/dp4" />
-                                            
-                <EditText
-                                                
-                        android:layout_width="@dimen/dp144"
-                        android:layout_height="@dimen/dp48"
-                        android:id="@+id/dateofbirthField"
-                        android:textSize="@dimen/text_medium"
-                        android:layout_marginLeft="@dimen/dp4"
-                        android:gravity="center_vertical"
-                                            
-                        android:focusable="false" />
-                                                
-            </TableRow>
-                                        
-            <TableRow
-                    android:layout_width="fill_parent"
+            <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp48"
-                    android:gravity="center_horizontal">
+                    android:text="@string/name_field_prompt"
+                    android:paddingRight="@dimen/dp4"
+                    android:textSize="@dimen/text_medium"
+                    android:gravity="center_vertical|right"
+                    android:layout_marginRight="@dimen/dp4" />
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp48"
-                        android:text="@string/email_field_prompt"
-                        android:paddingRight="@dimen/dp4"
-                        android:textSize="@dimen/text_medium"
-                        android:gravity="center_vertical|right"
-                        android:layout_marginRight="@dimen/dp4" />
-                                            
-                <EditText
-                                                
-                        android:layout_width="@dimen/dp144"
-                        android:layout_height="@dimen/dp48"
-                        android:id="@+id/emailField"
-                        android:textSize="@dimen/text_medium"
-                        android:layout_marginLeft="@dimen/dp4"
-                        android:gravity="center_vertical"
-                                            
-                        android:inputType="text" />
-                                                
-            </TableRow>
-                                        
-            <TableRow
-                    android:layout_width="fill_parent"
+            <EditText
+
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
-                    android:gravity="center_horizontal">
+                    android:id="@+id/nameField"
+                    android:textSize="@dimen/text_medium"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:gravity="center_vertical"
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp48"
-                        android:text="@string/gender_field_prompt"
-                        android:paddingRight="@dimen/dp4"
-                        android:textSize="@dimen/text_medium"
-                        android:gravity="center_vertical|right"
-                        android:layout_marginRight="@dimen/dp4" />
-                                            
-                <EditText
-                                                
-                        android:layout_width="@dimen/dp144"
-                        android:layout_height="@dimen/dp48"
-                        android:id="@+id/genderField"
-                        android:textSize="@dimen/text_medium"
-                        android:layout_marginLeft="@dimen/dp4"
-                        android:gravity="center_vertical"
-                                            
-                        android:inputType="text" />
-                                                
-            </TableRow>
-                                        
-            <TableRow
-                    android:layout_width="fill_parent"
+                    android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp48"
-                    android:gravity="center_horizontal">
+                    android:text="@string/email_field_prompt"
+                    android:paddingRight="@dimen/dp4"
+                    android:textSize="@dimen/text_medium"
+                    android:gravity="center_vertical|right"
+                    android:layout_marginRight="@dimen/dp4" />
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp48"
-                        android:text="@string/login_field_prompt"
-                        android:paddingRight="@dimen/dp4"
-                        android:textSize="@dimen/text_medium"
-                        android:gravity="center_vertical|right"
-                        android:layout_marginRight="@dimen/dp4" />
-                                            
-                <EditText
-                                                
-                        android:layout_width="@dimen/dp144"
-                        android:layout_height="@dimen/dp48"
-                        android:id="@+id/loginField"
-                        android:textSize="@dimen/text_medium"
-                        android:layout_marginLeft="@dimen/dp4"
-                        android:gravity="center_vertical"
-                                            
-                        android:inputType="text" />
-                                                
-            </TableRow>
-                                        
-            <TableRow
-                    android:layout_width="fill_parent"
+            <EditText
+
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
-                    android:gravity="center_horizontal">
+                    android:id="@+id/emailField"
+                    android:textSize="@dimen/text_medium"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:gravity="center_vertical"
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp48"
-                        android:text="@string/name_field_prompt"
-                        android:paddingRight="@dimen/dp4"
-                        android:textSize="@dimen/text_medium"
-                        android:gravity="center_vertical|right"
-                        android:layout_marginRight="@dimen/dp4" />
-                                            
-                <EditText
-                                                
-                        android:layout_width="@dimen/dp144"
-                        android:layout_height="@dimen/dp48"
-                        android:id="@+id/nameField"
-                        android:textSize="@dimen/text_medium"
-                        android:layout_marginLeft="@dimen/dp4"
-                        android:gravity="center_vertical"
-                                            
-                        android:inputType="text" />
-                                                
-            </TableRow>
-                                        
-            <TableRow
-                    android:layout_width="fill_parent"
+                    android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp48"
-                    android:gravity="center_horizontal">
+                    android:text="@string/gender_field_prompt"
+                    android:paddingRight="@dimen/dp4"
+                    android:textSize="@dimen/text_medium"
+                    android:gravity="center_vertical|right"
+                    android:layout_marginRight="@dimen/dp4" />
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp48"
-                        android:text="@string/password_field_prompt"
-                        android:paddingRight="@dimen/dp4"
-                        android:textSize="@dimen/text_medium"
-                        android:gravity="center_vertical|right"
-                        android:layout_marginRight="@dimen/dp4" />
-                                            
-                <EditText
-                                                
-                        android:layout_width="@dimen/dp144"
-                        android:layout_height="@dimen/dp48"
-                        android:id="@+id/passwordField"
-                        android:textSize="@dimen/text_medium"
-                        android:layout_marginLeft="@dimen/dp4"
-                        android:gravity="center_vertical"
-                                            
-                        android:password="true"
-                                            
-                        android:inputType="text" />
-                                                
-            </TableRow>
-                                        
-        </TableLayout>
+            <EditText
+
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:id="@+id/genderField"
+                    android:textSize="@dimen/text_medium"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:gravity="center_vertical"
+
+                    android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp48"
+                    android:text="@string/password_field_prompt"
+                    android:paddingRight="@dimen/dp4"
+                    android:textSize="@dimen/text_medium"
+                    android:gravity="center_vertical|right"
+                    android:layout_marginRight="@dimen/dp4" />
+
+            <EditText
+
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:id="@+id/passwordField"
+                    android:textSize="@dimen/text_medium"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:gravity="center_vertical"
+
+                    android:password="true"
+
+                    android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp48"
+                android:text="@string/repeatpassword_field_prompt"
+                android:paddingRight="@dimen/dp4"
+                android:textSize="@dimen/text_medium"
+                android:gravity="center_vertical|right"
+                android:layout_marginRight="@dimen/dp4" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp48"
+                android:id="@+id/repeatPasswordField"
+                android:textSize="@dimen/text_medium"
+                android:layout_marginLeft="@dimen/dp4"
+                android:gravity="center_vertical"
+                android:password="true"
+                android:inputType="text" />
+        </LinearLayout>
 
         <Button
                 android:layout_width="@dimen/dp144"

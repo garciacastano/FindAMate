@@ -209,10 +209,11 @@ public class ActivityItem{
         }catch (ParseException e) {
             Log.d("PARSE EXCEPTION", "PARSE EXCEPTION");
         }
-
         activityItem.setParticipants(bundle.getInt(Defaults.DETAILS_PARTICIPANTS));
         activityItem.setAssistants(bundle.getInt(Defaults.DETAILS_ASSISTANTS));
         activityItem.setCategory(bundle.getString(Defaults.DETAILS_CATEGORY));
+        activityItem.setLatitude(bundle.getDouble(Defaults.DETAILS_LATITUDE));
+        activityItem.setLongitude(bundle.getDouble(Defaults.DETAILS_LONGITUDE));
         activityItem.setOwnerId(bundle.getString(Defaults.DETAILS_OWNERID));
         return activityItem;
     }

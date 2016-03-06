@@ -15,7 +15,15 @@
     <string name="twitter_button_text">Twitter</string>
 
     <string name="google_button_text">Google+</string>
+    <string name="place_details">
+    <![CDATA[
+        <b>%1$s</b>
+        <br/>
+        Address: %3$s
+    ]]>
+    </string>
 
+    <string name="repeatpassword_field_prompt">Repeat password</string>
     <string name="register_text">Register</string>
     <string name="restore_link">restore</string>
     <string name="password_recovered_message">We sent an email to your email address with a link to a password change page. Please check your email and follow the link for further instructions.</string>

@@ -74,7 +74,7 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =new Intent(context, NewActivity.class);
+                Intent i = new Intent(context, NewActivity.class);
                 i.putExtra(Defaults.SESSION_EMAIL, session.getUserDetails().get(Defaults.KEY_EMAIL));
                 startActivityForResult(i, Defaults.ADD_ACTIVITY);
             }
@@ -88,7 +88,13 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
         super.onResume();
         if(!session.checkLogin()){
             finish();
+            return;
         }
+
+        //Object a = session.getUserDetails().get(Defaults.KEY_INTERESTS_FORMATED);
+        /**if(session.getUserDetails().get(Defaults.KEY_INTERESTS_FORMATED).toString().equals("dummy")){
+            launchSelectInterests();
+        }**/
 
     }
     @Override
@@ -136,6 +142,8 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
             i.putExtra(Defaults.DETAILS_DATE,activityItem.getDateToString(Defaults.DETAILS_DATE));
             i.putExtra(Defaults.DETAILS_DESCRIPTION,activityItem.getDescription());
             i.putExtra(Defaults.DETAILS_PARTICIPANTS,activityItem.getParticipants());
+            i.putExtra(Defaults.DETAILS_LONGITUDE,activityItem.getLongitude());
+            i.putExtra(Defaults.DETAILS_LATITUDE,activityItem.getLatitude());
             i.putExtra(Defaults.DETAILS_ASSISTANTS, activityItem.getAssistants());
             i.putExtra(Defaults.DETAILS_CATEGORY, activityItem.getCategory());
             startActivityForResult(i, Defaults.EDIT_ACTIVITY);
@@ -190,10 +198,7 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
             return true;
         }
         if (id == R.id.action_changeinterests) {
-            Intent i = new Intent(this,InterestsActivity.class);
-            i.putExtra(Defaults.KEY_INTERESTS_FORMATED, session.getUserDetails().get(Defaults.KEY_INTERESTS_FORMATED));
-            startActivityForResult(i, Defaults.CHANGE_INTERESTS);
-
+            launchSelectInterests();
             return true;
         }
         if (id == R.id.logout) {
@@ -203,6 +208,12 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void launchSelectInterests(){
+        Intent i = new Intent(this,InterestsActivity.class);
+        i.putExtra(Defaults.KEY_INTERESTS_FORMATED, session.getUserDetails().get(Defaults.KEY_INTERESTS_FORMATED));
+        startActivityForResult(i, Defaults.CHANGE_INTERESTS);
     }
 
     public void onActivitySelected(ActivityItem item) {

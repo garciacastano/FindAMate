@@ -27,6 +27,7 @@ import com.polimi.jgc.findamate.R;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.model.Defaults;
 import com.polimi.jgc.findamate.util.Assistance;
+import com.polimi.jgc.findamate.util.CategoryManager;
 import com.polimi.jgc.findamate.util.DefaultCallback;
 
 import java.util.Calendar;
@@ -105,22 +106,49 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO comprobar si mi email esta entre los asistentes o si soy el creador, en ese caso no actualizar la actividad
                 ActivityItem activityItem = ActivityItem.obtainActivityItem(bundle);
-                activityItem.setAssistantEmails(Assistance.addEmail(bundle.get(Defaults.SESSION_EMAIL).toString(),(bundle.get(Defaults.DETAILS_ASSISTANTSEMAILS).toString())));
-                activityItem.setAssistants(activityItem.getAssistants() + 1);
-                activityItem.setLatitude(lat);
-                activityItem.setLongitude(lon);
-                activityItem.saveAsync(new DefaultCallback<ActivityItem>(context) {
-                    @Override
-                    public void handleResponse(ActivityItem response) {
-                        super.handleResponse(response);
+                if(!join.getText().toString().equals("Leave")){
+                    activityItem.setAssistantEmails(Assistance.addEmail(bundle.getString(Defaults.SESSION_EMAIL),(bundle.getString(Defaults.DETAILS_ASSISTANTSEMAILS))));
+                    activityItem.setAssistants(activityItem.getAssistants() + 1);
+                    activityItem.setLatitude(lat);
+                    activityItem.setLongitude(lon);
+                    activityItem.saveAsync(new DefaultCallback<ActivityItem>(context) {
+                        @Override
+                        public void handleResponse(ActivityItem response) {
+                            super.handleResponse(response);
+                            Snackbar.make(title, "You joined the activity", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                            return;
+                        }
+                    });
+                }
+                else {
+                    activityItem.setAssistantEmails(Assistance.removeEmail(bundle.getString(Defaults.SESSION_EMAIL),(bundle.getString(Defaults.DETAILS_ASSISTANTSEMAILS))));
+                    activityItem.setAssistants(activityItem.getAssistants() - 1);
+                    activityItem.setLatitude(lat);
+                    activityItem.setLongitude(lon);
+                    activityItem.saveAsync(new DefaultCallback<ActivityItem>(context) {
+                        @Override
+                        public void handleResponse(ActivityItem response) {
+                            super.handleResponse(response);
+                            Snackbar.make(title, "You left the activity", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                            return;
+                        }
+                    });
 
-                        Snackbar.make(title, "You checked in", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                });
+                }
             }
         });
+
+        if(Assistance.parseString(bundle.getString(Defaults.DETAILS_ASSISTANTSEMAILS)).contains(bundle.getString(Defaults.SESSION_EMAIL))){
+            join.setText("Leave");
+        }
+
+        if(bundle.getString(Defaults.DETAILS_OWNERID).equals(bundle.get(Defaults.SESSION_EMAIL))){
+            join.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
