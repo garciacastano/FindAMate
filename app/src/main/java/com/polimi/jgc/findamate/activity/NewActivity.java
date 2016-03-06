@@ -137,7 +137,7 @@ public class NewActivity extends ActionBarActivity {
                     assistants.getText().toString().isEmpty() ||
                     description.getText().toString().isEmpty() ||
                     date.getText().toString().isEmpty() ||
-                    location_info.getText().toString().isEmpty() ||
+                    lat == 0.0 || lon ==0.0 ||
                     category.getSelectedItem().toString().isEmpty()){
                 Toast.makeText(this, "There is at least an empty field or location is not set.", Toast.LENGTH_SHORT).show();
                 return false;

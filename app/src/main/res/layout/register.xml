@@ -103,16 +103,14 @@
                     android:gravity="center_vertical|right"
                     android:layout_marginRight="@dimen/dp4" />
 
-            <EditText
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/genderField"
 
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp48"
-                    android:id="@+id/genderField"
-                    android:textSize="@dimen/text_medium"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:spinnerMode="dropdown" />
 
-                    android:inputType="text" />
         </LinearLayout>
 
         <LinearLayout

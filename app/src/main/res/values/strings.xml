@@ -125,6 +125,7 @@
     <string name="delete_activity_alerttitle">Delete activity</string>
     <string name="yes_capital">Yes</string>
     <string name="no_capital">No</string>
+    <string name="pref_default_display_name">John Smith</string>
 
 
 </resources>

@@ -76,11 +76,11 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
     private Double myLat;
     private Double myLon;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listactivity_activity);
+
         context=this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -115,9 +115,9 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
                 startActivityForResult(i, Defaults.ADD_ACTIVITY);
             }
         });
-
-
     }
+
+
     @Override
     protected void onResume(){
         super.onResume();
@@ -125,10 +125,8 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
             finish();
             return;
         }
-
-
-
     }
+
     @Override
     public void onConnected(Bundle connectionHint) {
         LocationRequest mLocationRequest = createLocationRequest();
@@ -137,7 +135,7 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
             @Override
             public void onLocationChanged(Location location) {
                 String message = String.format(
-                        "Location \n Longitude: %1$s \n Latitude: %2$s",
+                        "Location refreshed \n Longitude: %1$s \n Latitude: %2$s",
                         location.getLongitude(), location.getLatitude()
                 );
                 Toast.makeText(ListActivitiesActivity.this, message, Toast.LENGTH_LONG).show();
@@ -174,16 +172,16 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
 
     private LocationRequest createLocationRequest() {
         LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000*30);
+        mLocationRequest.setFastestInterval(1000*120);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         return mLocationRequest;
     }
 
     protected void onStart() {
         mGoogleApiClient.connect();
-        Snackbar.make(mViewPager, "Welcome "+session.getUserDetails().get(Defaults.KEY_NAME), Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        /**Snackbar.make(mViewPager, "Welcome "+session.getUserDetails().get(Defaults.KEY_NAME), Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();**/
         super.onStart();
     }
 

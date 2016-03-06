@@ -97,6 +97,10 @@ public class InterestsActivity extends ActionBarActivity implements InterestItem
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if(id == android.R.id.home){
+            onBackPressed();
+        }
         if (id == R.id.save_interests) {
             if(selectedInterests.size()==0){
                 Toast.makeText(this, "Select at least one category", Toast.LENGTH_SHORT).show();

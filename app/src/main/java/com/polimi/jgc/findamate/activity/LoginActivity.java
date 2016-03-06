@@ -153,7 +153,7 @@ public class LoginActivity extends Activity
         super.handleResponse(backendlessUser);
         String currentUserId = Backendless.UserService.loggedInUser();
         //String currentUserId = UserIdStorageFactory.instance().getStorage().get();
-        Toast.makeText(LoginActivity.this,"id = "+currentUserId, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(LoginActivity.this,"id = "+currentUserId, Toast.LENGTH_SHORT).show();
         if (backendlessUser.getProperty("interests") == null || backendlessUser.getProperty("interests").equals("null")) {
           session.createUserLoginSession(backendlessUser.getProperty("name").toString(), backendlessUser.getProperty("email").toString(), "'SOCCER'",currentUserId);
         } else {

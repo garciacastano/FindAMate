@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -171,6 +172,11 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if(id == android.R.id.home){
+            onBackPressed();
+        }
+
         if (id == R.id.delete_activity) {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -216,6 +222,7 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
 
     @Override
     public void onBackPressed(){
+        Log.d("BACK","BACK");
         Intent returnIntent = new Intent();
         returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
         setResult(Defaults.ABORT, returnIntent);

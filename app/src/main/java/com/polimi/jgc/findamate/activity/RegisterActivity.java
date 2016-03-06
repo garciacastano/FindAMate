@@ -13,10 +13,12 @@ import com.polimi.jgc.findamate.model.User;
 import com.polimi.jgc.findamate.util.DefaultCallback;
 import com.polimi.jgc.findamate.R;
 
+import java.util.ArrayList;
+
 
 public class RegisterActivity extends Activity {
   private EditText emailField;
-  private EditText genderField;
+  private Spinner genderField;
   private EditText loginField;
   private EditText nameField;
   private EditText passwordField;
@@ -24,10 +26,8 @@ public class RegisterActivity extends Activity {
   private Button registerButton;
   private String email;
   private String gender;
-  private String login;
   private String name;
   private String password;
-  private String repeatPassword;
   private User user;
 
   public void onCreate( Bundle savedInstanceState ){
@@ -39,7 +39,11 @@ public class RegisterActivity extends Activity {
 
   private void initUI() {
     emailField = (EditText) findViewById(R.id.emailField);
-    genderField = (EditText) findViewById(R.id.genderField);
+    genderField = (Spinner) findViewById(R.id.genderField);
+    ArrayList<String> gender = new ArrayList<>();
+    gender.add("Male");
+    gender.add("Female");
+    genderField.setAdapter(new ArrayAdapter(this,android.R.layout.simple_spinner_item, gender));
     loginField = (EditText) findViewById(R.id.loginField);
     nameField = (EditText) findViewById(R.id.nameField);
     passwordField = (EditText) findViewById(R.id.passwordField);
@@ -56,18 +60,13 @@ public class RegisterActivity extends Activity {
 
   private void onRegisterButtonClicked(){
     String emailText = emailField.getText().toString().trim();
-    String genderText = genderField.getText().toString().trim();
+    String genderText = genderField.getSelectedItem().toString().trim();
     String nameText = nameField.getText().toString().trim();
     String passwordText = passwordField.getText().toString().trim();
     String repeatPasswordText = repeatPasswordField.getText().toString().trim();
 
-    if ( emailText.isEmpty() ){
-      showToast( "Field 'email' cannot be empty." );
-      return;
-    }
-
-    if ( passwordText.isEmpty() ){
-      showToast( "Field 'password' cannot be empty." );
+    if ( emailText.isEmpty() || nameText.isEmpty() || passwordText.isEmpty() || repeatPasswordText.isEmpty() || genderText.isEmpty()){
+      showToast( "There is at least an empty field." );
       return;
     }
 
@@ -102,10 +101,6 @@ public class RegisterActivity extends Activity {
       user.setGender( gender );
     }
 
-    if( login != null ){
-      user.setLogin( login );
-    }
-
     if( name != null ){
       user.setName( name );
     }
@@ -113,7 +108,6 @@ public class RegisterActivity extends Activity {
     if( password != null ){
       user.setPassword( password );
     }
-
     user.setInterests("'SOCCER'");
 
     Backendless.UserService.register( user, new DefaultCallback<BackendlessUser>( RegisterActivity.this )
