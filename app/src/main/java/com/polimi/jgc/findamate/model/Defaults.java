@@ -37,6 +37,7 @@ public class Defaults {
   public static final String IS_FIRST_LOGIN = "IsFirstLogin";
   public static final String KEY_NAME = "name";
   public static final String KEY_EMAIL = "email";
+  public static final String KEY_USERID = "userid";
   public static final String KEY_INTERESTS_FORMATED="interests_formated";
   public static final String SESSION_EMAIL = "session_email";
 

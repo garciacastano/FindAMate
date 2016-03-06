@@ -58,7 +58,7 @@ public class InterestItemFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_interestsactivity_list, container, false);
         CategoryManager categoryManager=new CategoryManager();
         ArrayList<CategoryItem> categories = categoryManager.getListCategories();
-        ArrayList<CategoryItem> interests = CategoryManager.parseInterests(getArguments().get(Defaults.KEY_INTERESTS_FORMATED).toString());
+        ArrayList<CategoryItem> interests = CategoryManager.parseInterests(getArguments().getString(Defaults.KEY_INTERESTS_FORMATED));
 
         // Set the adapter
         if (view instanceof RecyclerView) {

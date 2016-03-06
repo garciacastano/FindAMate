@@ -45,6 +45,10 @@ public class User extends BackendlessUser
     return (String) super.getProperty( "login" );
   }
 
+  public void setInterests(String interests){
+    super.setProperty( "interests", interests );
+  }
+
   public void setLogin( String login )
   {
     super.setProperty( "login", login );

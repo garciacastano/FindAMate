@@ -33,9 +33,10 @@ public class UserSessionManager {
     }
 
     //Create login session
-    public void createUserLoginSession(String name, String email, String interests){
+    public void createUserLoginSession(String name, String email, String interests, String id){
         editor.putBoolean(Defaults.IS_USER_LOGIN, true);
         editor.putString(Defaults.KEY_NAME, name);
+        editor.putString(Defaults.KEY_USERID, id);
         editor.putString(Defaults.KEY_INTERESTS_FORMATED, interests);
         editor.putString(Defaults.KEY_EMAIL, email);
         editor.commit();
@@ -61,6 +62,7 @@ public class UserSessionManager {
         HashMap<String, String> user = new HashMap<String, String>();
         user.put(Defaults.KEY_NAME, pref.getString(Defaults.KEY_NAME, null));
         user.put(Defaults.KEY_EMAIL, pref.getString(Defaults.KEY_EMAIL, null));
+        user.put(Defaults.KEY_USERID, pref.getString(Defaults.KEY_USERID, null));
         user.put(Defaults.KEY_INTERESTS_FORMATED, pref.getString(Defaults.KEY_INTERESTS_FORMATED, null));
         return user;
     }
@@ -71,6 +73,7 @@ public class UserSessionManager {
         Intent i = new Intent(_context, LoginActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Backendless.UserService.logout();
         _context.startActivity(i);
     }
 

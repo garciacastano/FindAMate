@@ -41,6 +41,7 @@ public class InterestItemRecyclerViewAdapter extends RecyclerView.Adapter<Intere
 
         holder.mItem = mValues.get(position);
         holder.mName.setText(mValues.get(position).getCategory());
+        holder.mCheck.setChecked(false);
 
         for(int i=0; i<mSelectedInterests.size(); i++){
             if(mSelectedInterests.get(i).getCategory().equals(holder.mName.getText())){

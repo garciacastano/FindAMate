@@ -114,6 +114,8 @@ public class RegisterActivity extends Activity {
       user.setPassword( password );
     }
 
+    user.setInterests("'SOCCER'");
+
     Backendless.UserService.register( user, new DefaultCallback<BackendlessUser>( RegisterActivity.this )
     {
       @Override
