@@ -39,6 +39,8 @@ public class UserSessionManager {
         editor.putString(Defaults.KEY_USERID, id);
         editor.putString(Defaults.KEY_INTERESTS_FORMATED, interests);
         editor.putString(Defaults.KEY_EMAIL, email);
+        editor.putString(Defaults.KEY_MYLAT, "0.0");
+        editor.putString(Defaults.KEY_MYLON, "0.0");
         editor.commit();
     }
 
@@ -58,12 +60,20 @@ public class UserSessionManager {
         editor.commit();
     }
 
+    public void setLocation (Double myLat, Double myLon){
+        editor.putString(Defaults.KEY_MYLAT, myLat.toString());
+        editor.putString(Defaults.KEY_MYLON, myLon.toString());
+        editor.commit();
+    }
+
     public HashMap<String, String> getUserDetails(){
         HashMap<String, String> user = new HashMap<String, String>();
         user.put(Defaults.KEY_NAME, pref.getString(Defaults.KEY_NAME, null));
         user.put(Defaults.KEY_EMAIL, pref.getString(Defaults.KEY_EMAIL, null));
         user.put(Defaults.KEY_USERID, pref.getString(Defaults.KEY_USERID, null));
         user.put(Defaults.KEY_INTERESTS_FORMATED, pref.getString(Defaults.KEY_INTERESTS_FORMATED, null));
+        user.put(Defaults.KEY_MYLAT, pref.getString(Defaults.KEY_MYLAT, "0.0"));
+        user.put(Defaults.KEY_MYLON, pref.getString(Defaults.KEY_MYLON, "0.0"));
         return user;
     }
 

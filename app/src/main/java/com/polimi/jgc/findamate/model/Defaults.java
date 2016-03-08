@@ -11,6 +11,11 @@ public class Defaults {
   public static final String ARG_YOUR_INTERESTS = "your_interests";
   public static final String ARG_YOUR_ACTIVITIES ="your_activities";
   public static final String ARG_ACTIVITY_MODE = "activity_mode";
+  public static final String ARG_INTERESTS_FORMATED = "arg_interests_formated";
+  public static final String ARG_CREATED_ACTIVITIES = "created_activities";
+  public static final String ARG_MYLAT = "arg_mylat";
+  public static final String ARG_MYLON = "arg_mylon";
+
 
   //Details activity constants
   public static final String DETAILS_TITLE ="details_title";
@@ -39,6 +44,8 @@ public class Defaults {
   public static final String KEY_EMAIL = "email";
   public static final String KEY_USERID = "userid";
   public static final String KEY_INTERESTS_FORMATED="interests_formated";
+  public static final String KEY_MYLAT = "key_mylat";
+  public static final String KEY_MYLON = "key_mylon";
   public static final String SESSION_EMAIL = "session_email";
 
   //Manage activities constants
@@ -61,8 +68,5 @@ public class Defaults {
   public static final long MINIMUM_TIME_BETWEEN_UPDATES = 5000; // in Milliseconds
   public static final int MY_PERMISSION_ACCESS_COARSE_LOCATION = 8;
   public static final int MY_PERMISSION_ACCESS_FINE_LOCATION=9;
-
-  public static String ARG_MYLAT= "my_lat";
-  public static String ARG_MYLON= "my_lon";
 
 }

@@ -53,6 +53,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.polimi.jgc.findamate.model.ActivityItem;
 import com.polimi.jgc.findamate.R;
 import com.polimi.jgc.findamate.model.Defaults;
+import com.polimi.jgc.findamate.model.User;
 import com.polimi.jgc.findamate.util.Assistance;
 import com.polimi.jgc.findamate.util.CategoryManager;
 import com.polimi.jgc.findamate.util.DefaultCallback;
@@ -70,7 +71,7 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private Context context;
-    private UserSessionManager session;
+    public static UserSessionManager session;
     protected LocationManager mLocationManager;
     private GoogleApiClient mGoogleApiClient;
     private Double myLat;
@@ -116,75 +117,19 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
             }
         });
     }
-
-
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
     @Override
     protected void onResume(){
         super.onResume();
         if(!session.checkLogin()){
             finish();
-            return;
         }
     }
-
     @Override
-    public void onConnected(Bundle connectionHint) {
-        LocationRequest mLocationRequest = createLocationRequest();
-        int permissionCheck = ContextCompat.checkSelfPermission(ListActivitiesActivity.this, Manifest.permission.WRITE_CALENDAR);
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, new com.google.android.gms.location.LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                String message = String.format(
-                        "Location refreshed \n Longitude: %1$s \n Latitude: %2$s",
-                        location.getLongitude(), location.getLatitude()
-                );
-                Toast.makeText(ListActivitiesActivity.this, message, Toast.LENGTH_LONG).show();
-                myLat = location.getLatitude();
-                myLon = location.getLongitude();
-            }
-
-            public void onStatusChanged(String s, int i, Bundle b) {
-                Toast.makeText(ListActivitiesActivity.this, "Provider status changed",
-                        Toast.LENGTH_LONG).show();
-            }
-
-            public void onProviderDisabled(String s) {
-                Toast.makeText(ListActivitiesActivity.this,
-                        "Provider disabled by the user. GPS turned off",
-                        Toast.LENGTH_LONG).show();
-            }
-
-            public void onProviderEnabled(String s) {
-                Toast.makeText(ListActivitiesActivity.this,
-                        "Provider enabled by the user. GPS turned on",
-                        Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    public void onConnectionFailed(ConnectionResult connectionResult){
-
-    }
-    @Override
-    public void onConnectionSuspended(int cause) {
-        Log.d("GPS", "Connection to Google API suspended");
-    }
-
-    private LocationRequest createLocationRequest() {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000*30);
-        mLocationRequest.setFastestInterval(1000*120);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        return mLocationRequest;
-    }
-
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        /**Snackbar.make(mViewPager, "Welcome "+session.getUserDetails().get(Defaults.KEY_NAME), Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();**/
-        super.onStart();
-    }
-
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
@@ -226,6 +171,7 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
 
         //Start intent to update activity
         if (requestCode == Defaults.SEE_DETAILS && resultCode == Defaults.EDIT_ACTIVITY ) {
+            //TODO: crear nueva UI para editar actividades
             ActivityItem activityItem = ActivityItem.obtainActivityItem(data.getExtras());
             Intent i = new Intent(context, NewActivity.class);
             i.putExtra(Defaults.OBJECTID, activityItem.getObjectId());
@@ -260,51 +206,9 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
 
         //Change interests
         if (requestCode == Defaults.CHANGE_INTERESTS && resultCode == Defaults.CHANGE_INTERESTS ) {
-            String interestsFormated = data.getExtras().getString(Defaults.KEY_INTERESTS_FORMATED);
-            modifyInterests(interestsFormated);
+            User.modifyInterests(data.getExtras().getString(Defaults.KEY_INTERESTS_FORMATED), context);
+            refreshActivities();
         }
-    }
-
-    public void modifyInterests (final String interests){
-        AsyncCallback<Boolean> isValidLoginCallback = new AsyncCallback<Boolean>(){
-            @Override
-            public void handleResponse( Boolean response ){
-                /**Toast.makeText(ListActivitiesActivity.this,
-                        "[ASYNC] Is login valid? - " + response ,
-                        Toast.LENGTH_LONG).show();**/
-
-                //String userId = UserIdStorageFactory.instance().getStorage().get();
-                String userId = Backendless.UserService.loggedInUser();
-                if(userId.equals("")){
-                    Toast.makeText(ListActivitiesActivity.this,
-                            "Backend cannot retrieve user",
-                            Toast.LENGTH_LONG).show();
-                    session.logoutUser();
-                    return;
-                }
-                BackendlessUser user = Backendless.UserService.findById(userId);
-                user.setProperty("interests", interests);
-                Backendless.UserService.update(user, new DefaultCallback<BackendlessUser>(ListActivitiesActivity.this) {
-                    @Override
-                    public void handleResponse(BackendlessUser backendlessUser) {
-                        super.handleResponse(backendlessUser);
-                        session.setInterests(backendlessUser.getProperty("interests").toString());
-                        refreshActivities();
-                        Snackbar.make(mViewPager, "Your interests were succesfully updated", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                });
-
-            }
-
-            @Override
-            public void handleFault( BackendlessFault fault ){
-                System.err.println( "Error - " + fault );
-            }
-
-        };
-        Backendless.UserService.isValidLogin(isValidLoginCallback);
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -319,7 +223,9 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
             return true;
         }
         if (id == R.id.action_changeinterests) {
-            launchSelectInterests();
+            Intent i = new Intent(this,InterestsActivity.class);
+            i.putExtra(Defaults.KEY_INTERESTS_FORMATED, session.getUserDetails().get(Defaults.KEY_INTERESTS_FORMATED));
+            startActivityForResult(i, Defaults.CHANGE_INTERESTS);
             return true;
         }
         if (id == R.id.logout) {
@@ -327,14 +233,7 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    private void launchSelectInterests(){
-        Intent i = new Intent(this,InterestsActivity.class);
-        i.putExtra(Defaults.KEY_INTERESTS_FORMATED, session.getUserDetails().get(Defaults.KEY_INTERESTS_FORMATED));
-        startActivityForResult(i, Defaults.CHANGE_INTERESTS);
     }
 
     public void onActivitySelected(ActivityItem item) {
@@ -367,18 +266,6 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
     }
 
     private void refreshActivities(){
-        HashMap<String, String> user = session.getUserDetails();
-        Object a = Assistance.parseString(user.get(Defaults.KEY_INTERESTS_FORMATED)).get(0);
-        /**if(Assistance.parseString(user.get(Defaults.KEY_INTERESTS_FORMATED)).get(0).equals("dummy")){
-            launchSelectInterests();
-        }**/
-        if(checkValidLocation()){
-            ActivityItemFragment fragmentYI = (ActivityItemFragment) mSectionsPagerAdapter.getFragment(0);
-            fragmentYI.getArguments().putString(Defaults.KEY_INTERESTS_FORMATED, user.get(Defaults.KEY_INTERESTS_FORMATED));
-            fragmentYI.getArguments().putDouble(Defaults.ARG_MYLAT, myLat);
-            fragmentYI.getArguments().putDouble(Defaults.ARG_MYLON, myLon);
-        }
-
         mSectionsPagerAdapter.notifyDataSetChanged();
         Snackbar.make(mViewPager, "Activities updated", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
@@ -389,6 +276,62 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
         super.startActivityForResult(intent, requestCode);
     }
 
+
+    //LOCATION
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        LocationRequest mLocationRequest = createLocationRequest();
+        int permissionCheck = ContextCompat.checkSelfPermission(ListActivitiesActivity.this, Manifest.permission.WRITE_CALENDAR);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, new com.google.android.gms.location.LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                String message = String.format(
+                        "Location refreshed \n Longitude: %1$s \n Latitude: %2$s",
+                        location.getLongitude(), location.getLatitude()
+                );
+                Toast.makeText(ListActivitiesActivity.this, message, Toast.LENGTH_LONG).show();
+                myLat = location.getLatitude();
+                myLon = location.getLongitude();
+                session.setLocation(myLat,myLon);
+            }
+
+            public void onStatusChanged(String s, int i, Bundle b) {
+                Toast.makeText(ListActivitiesActivity.this, "Provider status changed",
+                        Toast.LENGTH_LONG).show();
+            }
+
+            public void onProviderDisabled(String s) {
+                Toast.makeText(ListActivitiesActivity.this,
+                        "Provider disabled by the user. GPS turned off",
+                        Toast.LENGTH_LONG).show();
+            }
+
+            public void onProviderEnabled(String s) {
+                Toast.makeText(ListActivitiesActivity.this,
+                        "Provider enabled by the user. GPS turned on",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void onConnectionFailed(ConnectionResult connectionResult){
+
+    }
+    @Override
+    public void onConnectionSuspended(int cause) {
+        Log.d("GPS", "Connection to Google API suspended");
+    }
+
+    private LocationRequest createLocationRequest() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000*30);
+        mLocationRequest.setFastestInterval(1000 * 120);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        return mLocationRequest;
+    }
+
+
+    //FRAGMENT PAGER ADAPTER
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private Map<Integer, String> mFragmentTags;
@@ -408,7 +351,7 @@ public class ListActivitiesActivity extends ActionBarActivity implements Activit
                 case 0:
                     return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_INTERESTS, session.getUserDetails());
                 case 1:
-                    return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_ACTIVITIES, session.getUserDetails());
+                    return ActivityItemFragment.newInstance(Defaults.ARG_CREATED_ACTIVITIES, session.getUserDetails());
             }
             return ActivityItemFragment.newInstance(Defaults.ARG_YOUR_INTERESTS, session.getUserDetails());
         }

@@ -82,18 +82,6 @@ public class DetailsActivity extends ActionBarActivity implements OnMapReadyCall
         assistants = (TextView) findViewById(R.id.detail_assistants);
         assistants.setText(String.valueOf(bundle.getInt(Defaults.DETAILS_ASSISTANTS)));
 
-        /**
-         * TODO implement more information in the layout
-         *
-         *
-         * updated = (TextView) findViewById(R.id.detail_updated);
-         * updated.setText(bundle.getString(Defaults.DETAILS_UPDATED));
-         *
-         * created = (TextView) findViewById(R.id.detail_created);
-         * created.setText(bundle.getString(Defaults.DETAILS_CREATED));
-         *
-         **/
-
         description = (TextView) findViewById(R.id.detail_description);
         description.setText(bundle.getString(Defaults.DETAILS_DESCRIPTION));
 

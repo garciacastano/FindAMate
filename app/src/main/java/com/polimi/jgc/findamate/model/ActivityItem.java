@@ -231,20 +231,15 @@ public class ActivityItem{
 
     //BACKENDLESS SAVING METHODS
 
-    public ActivityItem save(){
-        return Backendless.Data.of( ActivityItem.class ).save( this );
-    }
 
-    public void saveAsync( AsyncCallback<ActivityItem> callback )
-    {
+
+    public void saveAsync( AsyncCallback<ActivityItem> callback ){
         Backendless.Data.of( ActivityItem.class ).save( this, callback );
     }
 
     //BACKENDLESS REMOVING METHODS
 
-    public Long remove(){
-        return Backendless.Data.of( ActivityItem.class ).remove( this );
-    }
+
 
     public void removeAsync( AsyncCallback<Long> callback ){
         Backendless.Data.of( ActivityItem.class ).remove( this, callback );

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.polimi.jgc.findamate.R;
+
 import com.polimi.jgc.findamate.util.DefaultCallback;
 
 
@@ -38,35 +40,15 @@ import com.polimi.jgc.findamate.util.DefaultCallback;
 public class ActivityItemFragment extends Fragment {
 
     private OnListFragmentInteractionListener mListener;
-    private List<ActivityItem> activities;
     private RecyclerView recyclerView;
-    private Double myLat = 45.4764869;
-    private Double myLon = 9.2241113;
-
-    public ActivityItemFragment() {
-    }
 
    @SuppressWarnings("unused")
     public static ActivityItemFragment newInstance(String mode, HashMap<String, String> user) {
         ActivityItemFragment fragment = new ActivityItemFragment();
         Bundle args = new Bundle();
         args.putString(Defaults.ARG_ACTIVITY_MODE, mode);
-        args.putString(Defaults.KEY_EMAIL, user.get(Defaults.KEY_EMAIL));
-        args.putString(Defaults.KEY_INTERESTS_FORMATED, user.get(Defaults.KEY_INTERESTS_FORMATED));
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        onSaveInstanceState(savedInstanceState);
-        super.onCreate(savedInstanceState);
-        activities = new ArrayList<>();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -76,7 +58,7 @@ public class ActivityItemFragment extends Fragment {
         Context context = view.getContext();
         recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        downloadData(null);
+        downloadActivities();
         return view;
     }
 
@@ -90,65 +72,44 @@ public class ActivityItemFragment extends Fragment {
                     + " must implement OnListFragmentInteractionListener");
         }
     }
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnListFragmentInteractionListener {
-        void onActivitySelected(ActivityItem item);
-    }
+        void onActivitySelected(ActivityItem item);    }
 
-    public void downloadData(String newInterests) {
-        if(newInterests!=null) {
-            getArguments().putString(Defaults.KEY_INTERESTS_FORMATED,newInterests);
-        }
+    public void downloadActivities() {
         Bundle b = getArguments();
-        if(b.getDouble(Defaults.ARG_MYLAT)!=0 && b.getDouble(Defaults.ARG_MYLON) !=0){
-            myLat= b.getDouble(Defaults.ARG_MYLAT);
-            myLon= b.getDouble(Defaults.ARG_MYLON);
-        }
+        HashMap user = ListActivitiesActivity.session.getUserDetails();
         BackendlessDataQuery query = new BackendlessDataQuery();
         switch (b.getString(Defaults.ARG_ACTIVITY_MODE)) {
             case Defaults.ARG_YOUR_INTERESTS:
-                query.setWhereClause("category in ("+b.getString(Defaults.KEY_INTERESTS_FORMATED)+")" +
-                        "and distance( "+myLat+"," +myLon+ ", location.latitude, location.longitude ) < km(10)");
+                query.setWhereClause("category in ("+user.get(Defaults.KEY_INTERESTS_FORMATED).toString()+") " +
+                        "and distance( "+Double.parseDouble(user.get(Defaults.KEY_MYLAT).toString())+
+                        "," +Double.parseDouble(user.get(Defaults.KEY_MYLON).toString())+
+                        ", location.latitude, location.longitude ) < km(10)");
 
                 ActivityItem.findAsync(query, new DefaultCallback<BackendlessCollection<ActivityItem>>(getActivity()) {
                     @Override
                     public void handleResponse(BackendlessCollection<ActivityItem> response) {
                         super.handleResponse(response);
-                        activities = response.getData();
-                        Log.d("RETRIEVE DATA", "Activities YOUR INTERESTS = " + activities.size());
-                        ActivityItemRecyclerViewAdapter adapter = new ActivityItemRecyclerViewAdapter(activities, mListener);
+                        ActivityItemRecyclerViewAdapter adapter = new ActivityItemRecyclerViewAdapter(response.getData(), mListener);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
-
                     }
                 });
                 break;
 
-            case Defaults.ARG_YOUR_ACTIVITIES:
-                query.setWhereClause("ownerId = '"+b.getString(Defaults.KEY_EMAIL)+"'");
+            case Defaults.ARG_CREATED_ACTIVITIES:
+                query.setWhereClause("ownerId = '"+user.get(Defaults.KEY_EMAIL)+"'");
                 ActivityItem.findAsync(query, new DefaultCallback<BackendlessCollection<ActivityItem>>(getActivity()) {
                     @Override
                     public void handleResponse(BackendlessCollection<ActivityItem> response) {
                         super.handleResponse(response);
-                        activities = response.getData();
-                        Log.d("RETRIEVE DATA", "Activities de USUARIO = " + activities.size());
-                        ActivityItemRecyclerViewAdapter adapter = new ActivityItemRecyclerViewAdapter(activities, mListener);
+                        ActivityItemRecyclerViewAdapter adapter = new ActivityItemRecyclerViewAdapter(response.getData(), mListener);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     }
@@ -156,4 +117,5 @@ public class ActivityItemFragment extends Fragment {
                 break;
         }
     }
+
 }
