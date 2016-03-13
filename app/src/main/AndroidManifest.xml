@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.polimi.jgc.findamate"
+    package="com.app.jgc.findamate"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -27,7 +27,7 @@
 
 
         <activity
-            android:name=".activity.InterestsActivity"
+            android:name="com.app.jgc.findamate.activity.InterestsActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ListActivitiesActivity"
+            android:name="com.app.jgc.findamate.activity.ListActivitiesActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -47,7 +47,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.LoginActivity"
+            android:name="com.app.jgc.findamate.activity.LoginActivity"
             android:excludeFromRecents="true"
             android:label="@string/app_name"
             android:noHistory="true">
@@ -55,22 +55,22 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.PasswordRecoveryRequestedActivity" />
+        <activity android:name="com.app.jgc.findamate.activity.PasswordRecoveryRequestedActivity" />
         <activity
-            android:name=".activity.RegisterActivity"
+            android:name="com.app.jgc.findamate.activity.RegisterActivity"
             android:excludeFromRecents="true"
             android:noHistory="true" />
-        <activity android:name=".activity.RegistrationSuccessActivity" />
-        <activity android:name=".activity.RestorePasswordActivity" />
-        <activity android:name=".activity.LoginSuccessActivity" />
+        <activity android:name="com.app.jgc.findamate.activity.RegistrationSuccessActivity" />
+        <activity android:name="com.app.jgc.findamate.activity.RestorePasswordActivity" />
+        <activity android:name="com.app.jgc.findamate.activity.LoginSuccessActivity" />
 
         <service android:name="com.backendless.AndroidService" />
 
 
         <activity
-            android:name=".activity.DetailsActivity"
+            android:name="com.app.jgc.findamate.activity.DetailsActivity"
             android:label="@string/title_activity_details"
-            android:parentActivityName=".activity.ListActivitiesActivity">
+            android:parentActivityName="com.app.jgc.findamate.activity.ListActivitiesActivity">
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -78,12 +78,12 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ListActivitiesActivity" />
+                android:value="com.app.jgc.findamate.activity.ListActivitiesActivity" />
         </activity>
         <activity
-            android:name=".activity.NewActivity"
+            android:name="com.app.jgc.findamate.activity.NewActivity"
             android:label="@string/edit_activity_label"
-            android:parentActivityName=".activity.ListActivitiesActivity">
+            android:parentActivityName="com.app.jgc.findamate.activity.ListActivitiesActivity">
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -91,7 +91,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ListActivitiesActivity" />
+                android:value="com.app.jgc.findamate.activity.ListActivitiesActivity" />
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -104,6 +104,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <!--<meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />-->
     </application>
 
 </manifest>

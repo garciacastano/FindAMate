@@ -1,4 +1,4 @@
-package com.polimi.jgc.findamate;
+package com.app.jgc.findamate;
 
 import org.junit.Test;
 

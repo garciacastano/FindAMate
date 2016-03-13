@@ -1,7 +1,5 @@
 <resources>
     <!--
-    TODO: Before you run your application, you need a Google Maps API key.
-
     To get one, follow this link, follow the directions and press "Create" at the end:
 
     https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=E4:04:C9:D3:0D:72:3E:CA:1B:B0:60:B7:04:B0:E9:B8:00:39:8C:5B%3Bcom.polimi.jgc.findamate.activity
@@ -16,6 +14,6 @@
     string in this file.
     -->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-        AIzaSyDmgzLaDDxzVGc59dPaGJwTS8m3HDCCsK4
+        AIzaSyDCtd9CUDVpnDIeTwGLPGNRzzIxFs4OK-0
     </string>
 </resources>

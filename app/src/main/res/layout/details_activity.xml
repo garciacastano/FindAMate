@@ -13,87 +13,153 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
-                android:id="@+id/detail_title"
-                android:layout_gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:id="@+id/detail_category"
-                android:layout_gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:id="@+id/detail_date"
-                android:layout_gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:id="@+id/detail_description"
-                android:layout_gravity="center_horizontal" />
-
             <fragment
                 android:id="@+id/map"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="200dp"
                 class="com.google.android.gms.maps.SupportMapFragment" />
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_margin="8dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <Button
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Current number of players :  "
-                    android:id="@+id/textView3" />
+                    android:text="Join"
+                    android:id="@+id/details_join"
+                    android:layout_weight="0.5"
+                    style="@style/Base.Widget.AppCompat.Button.Colored" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <Button
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Medium Text"
-                    android:id="@+id/detail_assistants"
-                    android:layout_gravity="center_horizontal" />
+                    android:text="SHARE"
+                    android:id="@+id/details_share"
+                    android:layout_weight="0.5"
+                    style="@style/Widget.AppCompat.Button.Colored" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Total number of players:  " />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Activity title"
+                    android:id="@+id/detail_title"
+                    android:layout_gravity="center_horizontal|left"
+                    android:textSize="@dimen/details_title"
+                    android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Medium Text"
-                    android:id="@+id/detail_participants"
-                    android:layout_gravity="center_horizontal" />
+                    android:text="Description"
+                    android:id="@+id/detail_description"
+                    android:layout_gravity="center_horizontal|left"
+                    android:textSize="@dimen/details_body"
+                    android:textColor="@color/colorSecondaryText"
+                    android:layout_marginBottom="16dp"
+                    android:textIsSelectable="false" />
+
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorDivider" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medium Text"
+                android:id="@+id/detail_date"
+                android:layout_gravity="center_horizontal|left"
+                android:layout_margin="16dp"
+                android:textSize="@dimen/details_date"
+                android:textColor="@color/colorPrimaryText" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorDivider" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Still missing "
+                        android:id="@+id/textView3"
+                        android:textSize="@dimen/details_date"
+                        android:textColor="@color/colorPrimaryText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="XX"
+                        android:id="@+id/detail_assistants"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="@dimen/details_date"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" player(s)"
+                        android:id="@+id/textView5"
+                        android:textSize="@dimen/details_date"
+                        android:textColor="@color/colorPrimaryText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Total number of players:  "
+                        android:textSize="@dimen/details_date"
+                        android:textColor="@color/colorPrimaryText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="XX"
+                        android:id="@+id/detail_participants"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="@dimen/details_date"
+                        android:textColor="@color/colorPrimaryText" />
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorDivider" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -101,7 +167,8 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="People joined:"
                 android:id="@+id/textView4"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -111,12 +178,14 @@
                 android:id="@+id/detail_assistantsEmails"
                 android:layout_gravity="center_horizontal" />
 
-            <Button
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Attend"
-                android:id="@+id/details_join"
-                android:layout_gravity="center_horizontal" />
+                android:text="New Text"
+                android:id="@+id/detail_category"
+                android:layout_gravity="center_horizontal"
+                android:visibility="invisible" />
+
         </LinearLayout>
     </ScrollView>
 
